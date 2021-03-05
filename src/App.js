@@ -1,27 +1,30 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
+import { ResponsiveContainer, LineChart, XAxis, YAxis, Line, Tooltip, Label } from 'recharts';
 
 const URL_BASE = 'http://localhost:3001';
 
 export function App() {
   const [exerciseTypes, setExerciseTypes] = useState();
+  const [durationData, setDurationData] = useState();
   const [hasLoaded, setHasLoaded] = useState(false);
-  const [hasSubmittedEvent, setHasSubmittedEvent] = useState(false);
+  const [hasSubmittedEvent, setHasSubmittedEvent] = useState(0);
 
   useEffect(() => {
     async function loadData() {
       try {
         const data = await fetch(`${URL_BASE}/`, { method: 'GET', redirect: 'follow' });
-        const exerciseTypes = await data.json();
-        console.log(exerciseTypes);
-        setExerciseTypes(exerciseTypes);
+        const dbData = await data.json();
+        console.dir(dbData);
+        setExerciseTypes(dbData.exerciseTypes);
+        setDurationData({ average: dbData.durationAvg, listRecent: dbData.duration });
         setHasLoaded(true);
       } catch (error) {
         console.log(error);
       }
     };
     loadData();
-  }, [hasLoaded]);
+  }, [hasSubmittedEvent]);
 
   function postNewExerciseEvent(eventData) {
     console.log(eventData);
@@ -38,7 +41,7 @@ export function App() {
       const parsedData = response.json();
       console.log(parsedData);
 
-      setHasSubmittedEvent(true);
+      setHasSubmittedEvent(hasSubmittedEvent + 1);
     }
 
     postData(`${URL_BASE}/add-exercise-event`, eventData);
@@ -50,11 +53,81 @@ export function App() {
       : 
     <div className="App">
       <AddExerciseEvent { ...{exerciseTypes, postNewExerciseEvent, setHasSubmittedEvent, hasSubmittedEvent} }/>
+      <ViewExerciseDurationData {...{durationData} }/>
     </div>
   );
 }
 
-function AddExerciseEvent({exerciseTypes, postNewExerciseEvent, hasSubmittedEvent}) {
+function ViewExerciseDurationData({durationData}) {
+  return (
+    <div id="view-duration-data">
+      <div id="avg-workout-length">
+        Your average workout length is {durationData.average} minutes.
+      </div>
+      <ResponsiveContainer className="duration-chart" width="50%" height={250}>
+        <LineChart margin={{top: 50, bottom: 50, left: 25}} data={durationData.listRecent}>
+          <XAxis dataKey="date" padding={{left: 15, right: 15}} tick={<CustomXAxisTick />}>
+            <Label value="Lengths of Your Last 20 Workouts" offset={130} position="top" fill="black" />
+            <Label value="Date" offset={20} position="bottom" fill="black" />
+          </XAxis>
+          <YAxis dataKey="duration" padding={{top: 20}} tick={{fill: 'black'}}>
+            <Label value="Minutes" angle={-90} offset={0} position="left" fill="black" />
+          </YAxis>
+          <Line type="linear" dataKey="duration" label={<CustomDotLabel />} />
+          <Tooltip content={<CustomTooltip />} />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  )
+}
+
+function formatDateText(info) {
+  const months = {
+    '01': 'Jan',
+    '02': 'Feb',
+    '03': 'March',
+    '04': 'April',
+    '05': 'May',
+    '06': 'June',
+    '07': 'July',
+    '08': 'Aug',
+    '09': 'Sept',
+    '10': 'Oct',
+    '11': 'Nov',
+    '12': 'Dec'
+  }
+  const unformatted = info.split('-');
+  return `${months[unformatted[1]]} ${unformatted[2]}`
+}
+
+function CustomXAxisTick({x, y, _, payload}) {
+  return(
+    <g transform={`translate(${x}, ${y})`}>
+      <text x={0} y={0} dy={5} fontSize='12px' textAnchor="end" transform="rotate(-35)">{formatDateText(payload.value)}</text>
+    </g>
+  )
+}
+
+function CustomDotLabel({x, y, _, value}) {
+  return (
+    <text x={x} y={y} dy={-5} textAnchor="middle">{value}</text>
+  )
+}
+
+function CustomTooltip({ active, payload, label }) {
+  if (active) {
+    return (
+      <div className="custom-tooltip">
+        <p className="label">{formatDateText(label)}</p>
+        <p className="rate">{`${payload[0].value} minutes`}</p>
+      </div>
+    );
+  }
+
+  return null;
+};
+
+function AddExerciseEvent({exerciseTypes, postNewExerciseEvent}) {
   const [exerciseEventDate, setExerciseEventDate] = useState(new Date().toISOString().substr(0,10));
   const [exerciseEventType, setExerciseEventType] = useState();
   const [exerciseEventDuration, setExerciseEventDuration] = useState();
@@ -75,10 +148,7 @@ function AddExerciseEvent({exerciseTypes, postNewExerciseEvent, hasSubmittedEven
   console.log('rendering');
   return (
     <div className="add-exercise-event-form">
-      {hasSubmittedEvent
-        ? <div id="submitted-event-today">Great work, keep it up!</div>
-        : <div id="no-submission-today">Log your workout below:</div>
-      }
+      <div id="form-title">Log your workout below:</div>
       <form onSubmit={e => handleSubmit(e)}>
         <label htmlFor="date">Date </label>
         <input type="date" id="date" 
@@ -87,8 +157,8 @@ function AddExerciseEvent({exerciseTypes, postNewExerciseEvent, hasSubmittedEven
           defaultValue={exerciseEventDate}
           onChange={e => setExerciseEventDate(e.target.value)} 
         />
-        <select name="select-exercise-type" id="select-exercise-type" onChange={e => setExerciseEventType(e.target.value)}>
-          <option key='0' value='0'>Workout Type</option>
+        <label htmlFor="select-exercise-type">Workout Type</label>
+        <select id="select-exercise-type" onChange={e => setExerciseEventType(e.target.value)}>
           {exerciseTypes.map(entry =>
             <option key={entry.id} value={entry.id}>{entry.description}</option>
           )}
