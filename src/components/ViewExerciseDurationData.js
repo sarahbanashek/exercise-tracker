@@ -1,21 +1,27 @@
 import { ResponsiveContainer, LineChart, XAxis, YAxis, Line, Tooltip, Label } from 'recharts';
 
-export function ViewExerciseDurationData({durationData}) {
+export function ViewRecentExerciseData({durationAvg, last20}) {
+    const durationColor = '#470352';
+    const heartRateColor = '#01471d';
     return (
-      <div id="view-duration-data">
+      <div id="view-last20-data">
         <div id="avg-workout-length">
-          Your average workout length is {durationData.average} minutes.
+          Your average workout length is {durationAvg} minutes.
         </div>
-        <ResponsiveContainer className="duration-chart" width="50%" height={250}>
-          <LineChart margin={{top: 50, bottom: 50, left: 25}} data={durationData.listRecent}>
-            <XAxis dataKey="date" padding={{left: 15, right: 15}} tick={<CustomXAxisTick />}>
-              <Label value="Lengths of Your Last 20 Workouts" offset={130} position="top" fill="black" />
+        <ResponsiveContainer className="duration-chart" width="90%" height={600}>
+          <LineChart margin={{top: 50, bottom: 50, left: 25}} data={last20}>
+            <XAxis dataKey="date" reversed padding={{left: 15, right: 15}} axisLine={{stroke: 'black'}} tickLine={{stroke: 'black'}} tick={<CustomXAxisTick />}>
+              <Label value="Your Last 20 Workouts" offset={500} position="top" fill="black" />
               <Label value="Date" offset={20} position="bottom" fill="black" />
             </XAxis>
-            <YAxis dataKey="duration" padding={{top: 20}} tick={{fill: 'black'}}>
-              <Label value="Minutes" angle={-90} offset={0} position="left" fill="black" />
+            <YAxis yAxisId="left" dataKey="duration" axisLine={{stroke: durationColor}} tickLine={{stroke: durationColor}} tick={{fill: 'black'}}>
+              <Label value="Workout Length (minutes)" angle={-90} offset={0} position="left" fill="black" />
             </YAxis>
-            <Line type="linear" dataKey="duration" label={<CustomDotLabel />} />
+            <YAxis yAxisId="right" orientation="right" axisLine={{stroke: heartRateColor}} tickLine={{stroke: heartRateColor}} tick={{fill: 'black'}}>
+                <Label value="Heart Rate (bpm)" angle={-90} offset={-50} position="left" fill="black" />
+            </YAxis>
+            <Line yAxisId="left" type="linear" dataKey="duration" stroke={durationColor} />
+            <Line yAxisId="right" type="linear" dataKey="heart_rate" connectNulls stroke={heartRateColor} />
             <Tooltip content={<CustomTooltip />} />
           </LineChart>
         </ResponsiveContainer>
@@ -39,7 +45,7 @@ function formatDateText(info) {
       '12': 'Dec'
     }
     const unformatted = info.split('-');
-    return `${months[unformatted[1]]} ${unformatted[2]}`
+    return `${months[unformatted[1]]} ${parseInt(unformatted[2], 10)}`
 }
   
 function CustomXAxisTick({x, y, _, payload}) {
@@ -50,18 +56,22 @@ function CustomXAxisTick({x, y, _, payload}) {
     );
 }
 
-    function CustomDotLabel({x, y, _, value}) {
-        return (
-            <text x={x} y={y} dy={-5} textAnchor="middle">{value}</text>
-        );
-}
+// function CustomDotLabel({x, y, _, value}) {
+//     return (
+//         <text x={x} y={y} dy={-5} textAnchor="middle">{value}</text>
+//     );
+// }
   
 function CustomTooltip({ active, payload, label }) {
     if (active) {
         return (
         <div className="custom-tooltip">
-            <p className="label">{formatDateText(label)}</p>
-            <p className="rate">{`${payload[0].value} minutes`}</p>
+            <p className="tooltip-date-description">{`${formatDateText(label)}: ${payload[0].payload.description}`}</p>
+            <p className="tooltip-duration">{`${payload[0].value} minutes`}</p>
+            {payload[0].payload.heart_rate
+                ? <p className="tooltip-duration">{`${payload[0].payload.heart_rate} bpm`}</p>
+                : null
+            }
         </div>
         );
     }
