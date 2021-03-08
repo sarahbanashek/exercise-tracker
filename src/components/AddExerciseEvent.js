@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 export function AddExerciseEvent({exerciseTypes, postNewExerciseEvent}) {
     const [exerciseEventDate, setExerciseEventDate] = useState(new Date().toISOString().substr(0,10));
-    const [exerciseEventType, setExerciseEventType] = useState();
+    const [exerciseEventType, setExerciseEventType] = useState(1);
     const [exerciseEventDuration, setExerciseEventDuration] = useState();
     const [exerciseEventHeartRate, setExerciseEventHeartRate] = useState();
   
