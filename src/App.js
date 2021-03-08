@@ -1,7 +1,7 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
 import { AddExerciseEvent } from './components/AddExerciseEvent';
-import { ViewRecentExerciseData } from './components/ViewExerciseDurationData';
+import { ViewRecentExerciseData } from './components/ViewRecentExerciseData';
 
 const URL_BASE = 'http://localhost:3001';
 
