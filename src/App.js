@@ -1,13 +1,14 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
 import { AddExerciseEvent } from './components/AddExerciseEvent';
+import { DataAverages } from './components/DataAverages';
 import { ViewRecentExerciseData } from './components/ViewRecentExerciseData';
 
 const URL_BASE = 'http://localhost:3001';
 
 export function App() {
   const [exerciseTypes, setExerciseTypes] = useState();
-  const [durationAvg, setDurationAvg] = useState();
+  const [averages, setAverages] = useState();
   const [last20, setLast20] = useState();
   const [hasLoaded, setHasLoaded] = useState(false);
   const [hasSubmittedEvent, setHasSubmittedEvent] = useState(0);
@@ -18,12 +19,11 @@ export function App() {
         const data = await fetch(`${URL_BASE}/`, { method: 'GET', redirect: 'follow' });
         const dbData = await data.json();
         console.dir(dbData);
-        const average = dbData.durationAvg;
+        const avgs = {duration: dbData.durationAvg, heartRate: dbData.heartRateAvg};
         setExerciseTypes(dbData.exerciseTypes);
-        setDurationAvg(average);
+        setAverages(avgs);
         setLast20(dbData.last20);
         setHasLoaded(true);
-        console.dir(last20);
       } catch (error) {
         console.log(error);
       }
@@ -58,7 +58,8 @@ export function App() {
       : 
     <div className="App">
       <AddExerciseEvent { ...{exerciseTypes, postNewExerciseEvent, setHasSubmittedEvent, hasSubmittedEvent} }/>
-      <ViewRecentExerciseData {...{durationAvg, last20} }/>
+      <DataAverages {...{averages}}/>
+      <ViewRecentExerciseData {...{last20} }/>
     </div>
   );
 }

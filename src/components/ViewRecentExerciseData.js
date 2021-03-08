@@ -1,13 +1,10 @@
 import { ResponsiveContainer, LineChart, XAxis, YAxis, Line, Tooltip, Label } from 'recharts';
 
-export function ViewRecentExerciseData({durationAvg, last20}) {
+export function ViewRecentExerciseData({last20}) {
     const durationColor = '#470352';
     const heartRateColor = '#01471d';
     return (
       <div id="view-last20-data">
-        <div id="avg-workout-length">
-          Your average workout length is {durationAvg} minutes.
-        </div>
         <ResponsiveContainer className="duration-chart" width="90%" height={600}>
           <LineChart margin={{top: 50, bottom: 50, left: 25}} data={last20}>
             <XAxis dataKey="date" reversed padding={{left: 15, right: 15}} axisLine={{stroke: 'black'}} tickLine={{stroke: 'black'}} tick={<CustomXAxisTick />}>
