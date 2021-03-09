@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { AddExerciseEvent } from './components/AddExerciseEvent';
 import { DataAverages } from './components/DataAverages';
 import { ViewRecentExerciseData } from './components/ViewRecentExerciseData';
+import { ViewExerciseTypesData } from './components/ViewExerciseTypesData';
 
 const URL_BASE = 'http://localhost:3001';
 
@@ -10,6 +11,7 @@ export function App() {
   const [exerciseTypes, setExerciseTypes] = useState();
   const [averages, setAverages] = useState();
   const [last20, setLast20] = useState();
+  const [loggedExerciseTypes, setLoggedExerciseTypes] = useState();
   const [hasLoaded, setHasLoaded] = useState(false);
   const [hasSubmittedEvent, setHasSubmittedEvent] = useState(0);
 
@@ -23,6 +25,7 @@ export function App() {
         setExerciseTypes(dbData.exerciseTypes);
         setAverages(avgs);
         setLast20(dbData.last20);
+        setLoggedExerciseTypes(dbData.workoutTypeFrequencies);
         setHasLoaded(true);
       } catch (error) {
         console.log(error);
@@ -60,6 +63,7 @@ export function App() {
       <AddExerciseEvent { ...{exerciseTypes, postNewExerciseEvent, setHasSubmittedEvent, hasSubmittedEvent} }/>
       <DataAverages {...{averages}}/>
       <ViewRecentExerciseData {...{last20} }/>
+      <ViewExerciseTypesData {...{loggedExerciseTypes}} />
     </div>
   );
 }
