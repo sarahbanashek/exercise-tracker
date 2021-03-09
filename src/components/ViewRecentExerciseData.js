@@ -1,8 +1,8 @@
 import { ResponsiveContainer, LineChart, XAxis, YAxis, Line, Tooltip, Label } from 'recharts';
 
 export function ViewRecentExerciseData({last20}) {
-    const durationColor = '#470352';
-    const heartRateColor = '#01471d';
+    const durationColor = '#003f5c';
+    const heartRateColor = '#a05195';
     return (
       <div id="view-last20-data">
         <ResponsiveContainer className="duration-chart" width="90%" height={600}>
