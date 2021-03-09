@@ -12,6 +12,7 @@ export function App() {
   const [averages, setAverages] = useState();
   const [last20, setLast20] = useState();
   const [loggedExerciseTypes, setLoggedExerciseTypes] = useState();
+  const [loggedExerciseTimeSpent, setLoggedExerciseTimeSpent] = useState();
   const [hasLoaded, setHasLoaded] = useState(false);
   const [hasSubmittedEvent, setHasSubmittedEvent] = useState(0);
 
@@ -26,6 +27,7 @@ export function App() {
         setAverages(avgs);
         setLast20(dbData.last20);
         setLoggedExerciseTypes(dbData.workoutTypeFrequencies);
+        setLoggedExerciseTimeSpent(dbData.workoutTypeTimeSpent);
         setHasLoaded(true);
       } catch (error) {
         console.log(error);
@@ -63,7 +65,7 @@ export function App() {
       <AddExerciseEvent { ...{exerciseTypes, postNewExerciseEvent, setHasSubmittedEvent, hasSubmittedEvent} }/>
       <DataAverages {...{averages}}/>
       <ViewRecentExerciseData {...{last20} }/>
-      <ViewExerciseTypesData {...{loggedExerciseTypes}} />
+      <ViewExerciseTypesData {...{loggedExerciseTypes, loggedExerciseTimeSpent}} />
     </div>
   );
 }
