@@ -1,11 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-export function AddExerciseEvent({exerciseTypes, postNewExerciseEvent}) {
-    const [exerciseEventDate, setExerciseEventDate] = useState(new Date().toISOString().substr(0,10));
+export function AddExerciseEvent({exerciseTypes, postNewExerciseEvent, setShowEditExerciseTypes}) {
+    const [exerciseEventDate, setExerciseEventDate] = useState();
     const [exerciseEventType, setExerciseEventType] = useState(1);
     const [exerciseEventDuration, setExerciseEventDuration] = useState();
     const [exerciseEventHeartRate, setExerciseEventHeartRate] = useState();
+    const [formSubmitted, setFormSubmitted] = useState(0);
   
+    useEffect(() => {
+      let today = new Date();
+      const offset = today.getTimezoneOffset();
+      today = new Date(today.getTime() - (offset * 60000));
+      setExerciseEventDate(today.toISOString().split('T')[0]);
+    }, [formSubmitted]);
+    
+    function handleSetExcerciseType(value) {
+      value === '0'
+        ? setShowEditExerciseTypes(true)
+        : setExerciseEventType(value);
+    }
+    
     function handleSubmit(event) {
       event.preventDefault();
       postNewExerciseEvent({
@@ -15,10 +29,9 @@ export function AddExerciseEvent({exerciseTypes, postNewExerciseEvent}) {
         heartRate: exerciseEventHeartRate
       });
       event.target.reset();
-      setExerciseEventDate(new Date().toISOString().substr(0,10));
+      setFormSubmitted(formSubmitted + 1);
     }
   
-    console.log('rendering');
     return (
       <div className="add-exercise-event-form">
         <div id="form-title">Log your workout below:</div>
@@ -31,10 +44,11 @@ export function AddExerciseEvent({exerciseTypes, postNewExerciseEvent}) {
             onChange={e => setExerciseEventDate(e.target.value)} 
           />
           <label htmlFor="select-exercise-type">Workout Type</label>
-          <select id="select-exercise-type" onChange={e => setExerciseEventType(e.target.value)}>
+          <select id="select-exercise-type" onChange={e => handleSetExcerciseType(e.target.value)}>
             {exerciseTypes.map(entry =>
               <option key={entry.id} value={entry.id}>{entry.description}</option>
             )}
+            <option key="edit" value="0">edit workout types</option>
           </select>
           <label htmlFor="duration">Workout Length (in minutes) </label>
           <input type="number" id="duration" onChange={e => setExerciseEventDuration(e.target.value)}/>
