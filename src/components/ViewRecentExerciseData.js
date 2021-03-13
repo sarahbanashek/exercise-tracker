@@ -12,13 +12,13 @@ export function ViewRecentExerciseData({last20}) {
               <Label value="Date" offset={20} position="bottom" fill="black" />
             </XAxis>
             <YAxis yAxisId="left" dataKey="duration" axisLine={{stroke: durationColor}} tickLine={{stroke: durationColor}} tick={{fill: 'black'}}>
-              <Label value="Workout Length (minutes)" angle={-90} offset={0} position="left" fill="black" />
+              <Label value="Workout Length (minutes)" angle={-90} offset={0} dy={-95} position="left" fill="black" />
             </YAxis>
             <YAxis yAxisId="right" orientation="right" axisLine={{stroke: heartRateColor}} tickLine={{stroke: heartRateColor}} tick={{fill: 'black'}}>
-                <Label value="Heart Rate (bpm)" angle={-90} offset={-50} position="left" fill="black" />
+                <Label value="Heart Rate (bpm)" angle={-90} offset={-50} dy={-70} position="left" fill="black" />
             </YAxis>
-            <Line yAxisId="left" type="linear" dataKey="duration" stroke={durationColor} />
-            <Line yAxisId="right" type="linear" dataKey="heart_rate" connectNulls stroke={heartRateColor} />
+            <Line yAxisId="left" type="linear" dataKey="duration" stroke={durationColor} strokeWidth={2} />
+            <Line yAxisId="right" type="linear" dataKey="heart_rate" connectNulls stroke={heartRateColor} strokeWidth={2} />
             <Tooltip content={<CustomTooltip />} />
           </LineChart>
         </ResponsiveContainer>
@@ -52,12 +52,6 @@ function CustomXAxisTick({x, y, _, payload}) {
         </g>
     );
 }
-
-// function CustomDotLabel({x, y, _, value}) {
-//     return (
-//         <text x={x} y={y} dy={-5} textAnchor="middle">{value}</text>
-//     );
-// }
   
 function CustomTooltip({ active, payload, label }) {
     if (active) {
