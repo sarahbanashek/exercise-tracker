@@ -11,12 +11,13 @@ export function ViewExerciseTypesData({loggedExerciseTypes, loggedExerciseTimeSp
         '#ff7c43',
         '#ffa600'
     ];
+    
     return (
       <div id="view-exercise-types-data">
         <div id="pie-charts-title">Breakdown of Your Workout Types</div>
         <div id="frequency-pie-chart">
             <div className="individual-pie-chart-titles">Number of Times You've Logged Each Workout</div>
-            <PieChart width={400} height={300}>
+            <PieChart width={600} height={300}>
                 <Pie data={loggedExerciseTypes} outerRadius="70%" label={entry => entry.description} dataKey="COUNT(exercise_events.id)">
                     {loggedExerciseTypes.map((_, i) => 
                         <Cell key={`cell-${i}`} fill={colors[i % colors.length]} />
@@ -27,8 +28,8 @@ export function ViewExerciseTypesData({loggedExerciseTypes, loggedExerciseTimeSp
             </div>
         <div id="total-time-pie-chart">
             <div className="individual-pie-chart-titles">Time You've Spent on Each Workout</div>
-            <PieChart width={400} height={300}>
-                <Pie data={loggedExerciseTimeSpent} outerRadius="70%" label={entry => entry.description} dataKey="SUM(duration)">
+            <PieChart width={600} height={300}>
+                <Pie data={loggedExerciseTimeSpent} outerRadius="70%" label={entry => entry.description} nameKey='description' dataKey="SUM(duration)">
                     {loggedExerciseTimeSpent.map((_, i) => 
                         <Cell key={`cell-${i}`} fill={colors[i % colors.length]} />
                     )}
@@ -45,7 +46,10 @@ function CustomTooltipFrequency({ active, payload }) {
         return (
         <div className="custom-tooltip">
             <p id="tooltip-date-description">{`You've logged ${payload[0].payload.description}`}</p>
-            <p id="tooltip-duration">{`${payload[0].value} times`}</p>
+            {payload[0].value === 1
+                ? <p id="tooltip-duration">{`${payload[0].value} time`}</p>
+                : <p id="tooltip-duration">{`${payload[0].value} times`}</p>
+            }
         </div>
         );
     }
