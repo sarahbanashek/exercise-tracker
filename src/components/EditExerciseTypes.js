@@ -26,7 +26,7 @@ export function EditExerciseTypes({unusedExerciseTypes, editExerciseTypesInDB, s
       <div id="edit-exercise-types-container">
         <div className="form-title">Edit your workout types</div>
         <form onSubmit={e => handleSubmit(e)}>
-          <input type="button" id="close-form" aria-label="close edit workout types form" value="X" onClick={() => setShowEditExerciseTypes(false)} />
+          <input type="button" className="close-form" aria-label="close edit workout types form" value="X" onClick={() => setShowEditExerciseTypes(false)} />
           <label htmlFor="select-to-remove">
             Choose which workout types to remove:
           </label>
