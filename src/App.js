@@ -4,6 +4,7 @@ import { AddExerciseEvent } from './components/AddExerciseEvent';
 import { DataAverages } from './components/DataAverages';
 import { ViewRecentExerciseData } from './components/ViewRecentExerciseData';
 import { ViewExerciseTypesData } from './components/ViewExerciseTypesData';
+import { EditExerciseEvents } from './components/EditExerciseEvents';
 
 const URL_BASE = 'http://localhost:3001';
 
@@ -16,6 +17,8 @@ export function App() {
   const [hasLoaded, setHasLoaded] = useState(false);
   const [hasSubmittedData, setHasSubmittedData] = useState(0);
   const [unusedExerciseTypes, setUnusedExerciseTypes] = useState();
+  const [showExerciseEventsToDelete, setShowExerciseEventsToDelete] = useState(false);
+  const [listAllExerciseEvents, setListAllExerciseEvents] = useState();
 
   useEffect(() => {
     async function loadData() {
@@ -59,13 +62,12 @@ export function App() {
       const data = await fetch(`${URL_BASE}/edit-exercise-types`, { method: 'GET', redirect: 'follow' });
       const dbData = await data.json();
       setUnusedExerciseTypes(dbData);
-      // setShowEditExerciseTypes(true);
     } catch (error) {
       console.log(error);
     }
   }
 
-  async function editExerciseEventsInDB(exerciseData) {
+  async function editExerciseTypesInDB(exerciseData) {
     const response = await fetch(`${URL_BASE}/edit-exercise-types`, {
       method: 'POST',
       credentials: 'omit',
@@ -81,15 +83,55 @@ export function App() {
     setHasSubmittedData(hasSubmittedData + 1);
   }
 
+  async function getAllExerciseEvents() {
+    try {
+      const data = await fetch(`${URL_BASE}/edit-exercise-events`, { method: 'GET', redirect: 'follow' });
+      const dbData = await data.json();
+      setListAllExerciseEvents(dbData);
+      console.dir(dbData);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  function toggleShowExerciseEvents(bool) {
+    if (bool) {
+      getAllExerciseEvents(); 
+    }
+    setShowExerciseEventsToDelete(bool);
+  }
+
+  async function deleteExerciseEvents(idsToDelete) {
+    const response = await fetch(`${URL_BASE}/edit-exercise-events`, {
+      method: 'POST',
+      credentials: 'omit',
+      headers: { 
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(idsToDelete)
+    });
+    const parsedData = response.json();
+    console.log(parsedData);
+
+    setHasSubmittedData(hasSubmittedData + 1);
+  }
+
   return (
     !hasLoaded 
       ? <div>Loading...</div> 
       : 
     <div className="App">
-      <AddExerciseEvent { ...{exerciseTypes, postNewExerciseEvent, getUnusedExerciseTypes, unusedExerciseTypes, editExerciseEventsInDB} }/>
+      <AddExerciseEvent { ...{exerciseTypes, postNewExerciseEvent, getUnusedExerciseTypes, unusedExerciseTypes, editExerciseTypesInDB} }/>
       <DataAverages {...{averages}}/>
       <ViewRecentExerciseData {...{last20} }/>
       <ViewExerciseTypesData {...{loggedExerciseTypes, loggedExerciseTimeSpent}} />
+      {showExerciseEventsToDelete && listAllExerciseEvents
+        ? <EditExerciseEvents {...{listAllExerciseEvents, toggleShowExerciseEvents, deleteExerciseEvents}} />
+        : <button id="show-exercise-events-button" onClick={() => toggleShowExerciseEvents(true)}>
+            <span>Click here to delete a workout</span>
+          </button>
+      }
     </div>
   );
 }
