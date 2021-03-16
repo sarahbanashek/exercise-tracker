@@ -4,6 +4,7 @@ import { AddExerciseEvent } from './components/AddExerciseEvent';
 import { DataAverages } from './components/DataAverages';
 import { ViewRecentExerciseData } from './components/ViewRecentExerciseData';
 import { ViewExerciseTypesData } from './components/ViewExerciseTypesData';
+import { ViewAllWorkouts } from './components/ViewAllWorkouts';
 import { EditExerciseEvents } from './components/EditExerciseEvents';
 
 const URL_BASE = 'http://localhost:3001';
@@ -17,8 +18,9 @@ export function App() {
   const [hasLoaded, setHasLoaded] = useState(false);
   const [hasSubmittedData, setHasSubmittedData] = useState(0);
   const [unusedExerciseTypes, setUnusedExerciseTypes] = useState();
-  const [showExerciseEventsToDelete, setShowExerciseEventsToDelete] = useState(false);
   const [listAllExerciseEvents, setListAllExerciseEvents] = useState();
+  const [showAllExerciseEvents, setShowAllExerciseEvents] = useState(false);
+  const [showExerciseEventsToDelete, setShowExerciseEventsToDelete] = useState(false);
 
   useEffect(() => {
     async function loadData() {
@@ -94,11 +96,15 @@ export function App() {
     }
   }
 
-  function toggleShowExerciseEvents(bool) {
+  function toggleShowExerciseEvents(bool, option) {
     if (bool) {
       getAllExerciseEvents(); 
     }
-    setShowExerciseEventsToDelete(bool);
+    if (option === 'view') {
+      setShowAllExerciseEvents(bool);
+    } else if (option === 'delete') {
+      setShowExerciseEventsToDelete(bool);
+    }
   }
 
   async function deleteExerciseEvents(idsToDelete) {
@@ -126,10 +132,16 @@ export function App() {
       <DataAverages {...{averages}}/>
       <ViewRecentExerciseData {...{last20} }/>
       <ViewExerciseTypesData {...{loggedExerciseTypes, loggedExerciseTimeSpent}} />
+      {showAllExerciseEvents && listAllExerciseEvents
+        ? <ViewAllWorkouts {...{listAllExerciseEvents, toggleShowExerciseEvents}} />
+        : <button className="show-exercise-events-button" onClick={() => toggleShowExerciseEvents(true, 'view')}>
+            <span>View Your Workout Log</span>
+          </button>
+      }
       {showExerciseEventsToDelete && listAllExerciseEvents
         ? <EditExerciseEvents {...{listAllExerciseEvents, toggleShowExerciseEvents, deleteExerciseEvents}} />
-        : <button id="show-exercise-events-button" onClick={() => toggleShowExerciseEvents(true)}>
-            <span>Click here to delete a workout</span>
+        : <button className="show-exercise-events-button" onClick={() => toggleShowExerciseEvents(true, 'delete')}>
+            <span>Delete a Workout From Your Log</span>
           </button>
       }
     </div>
