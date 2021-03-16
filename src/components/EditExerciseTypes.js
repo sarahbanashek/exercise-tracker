@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export function EditExerciseTypes({unusedExerciseTypes, editExerciseEventsInDB, setShowEditExerciseTypes}) {
+export function EditExerciseTypes({unusedExerciseTypes, editExerciseTypesInDB, setShowEditExerciseTypes}) {
     const [idsToRemove, setIdsToRemove] = useState();
     const [workoutsToAdd, setWorkoutsToAdd] = useState();
   
@@ -17,7 +17,7 @@ export function EditExerciseTypes({unusedExerciseTypes, editExerciseEventsInDB, 
       if (workoutsToAdd) {
         data.toAdd = workoutsToAdd;
       }
-      editExerciseEventsInDB(data);
+      editExerciseTypesInDB(data);
       console.log(data);
       setShowEditExerciseTypes(false);
     }

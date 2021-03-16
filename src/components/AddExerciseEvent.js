@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { EditExerciseTypes } from './EditExerciseTypes';
 
-export function AddExerciseEvent({exerciseTypes, postNewExerciseEvent, getUnusedExerciseTypes, unusedExerciseTypes, editExerciseEventsInDB,}) {
+export function AddExerciseEvent({exerciseTypes, postNewExerciseEvent, getUnusedExerciseTypes, unusedExerciseTypes, editExerciseTypesInDB}) {
     const [exerciseEventDate, setExerciseEventDate] = useState();
     const [exerciseEventType, setExerciseEventType] = useState(1);
     const [exerciseEventDuration, setExerciseEventDuration] = useState();
@@ -65,7 +65,7 @@ export function AddExerciseEvent({exerciseTypes, postNewExerciseEvent, getUnused
           <input type="submit" id="submit-exercise-event" value="Add To Log" />
         </form>
         {showEditExerciseTypes && unusedExerciseTypes
-        ? <EditExerciseTypes {...{unusedExerciseTypes, editExerciseEventsInDB, setShowEditExerciseTypes}} />
+        ? <EditExerciseTypes {...{unusedExerciseTypes, editExerciseTypesInDB, setShowEditExerciseTypes}} />
         : null
       }
       </div>
