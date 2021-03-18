@@ -1,8 +1,9 @@
 import { ResponsiveContainer, LineChart, XAxis, YAxis, Line, Tooltip, Label } from 'recharts';
+import { durationColor, heartRateColor, pieChartColors } from '../utilities/colors';
+import { monthDayYearDate } from '../utilities/monthDayYearDate';
 
 export function ViewRecentExerciseData({last20}) {
-    const durationColor = '#003f5c';
-    const heartRateColor = '#a05195';
+  last20.forEach((obj, i) => obj.index = i % pieChartColors.length);
     return (
       <div id="view-last20-data">
         <ResponsiveContainer className="duration-chart" width="90%" height={600}>
@@ -26,7 +27,7 @@ export function ViewRecentExerciseData({last20}) {
     );
 }
   
-function formatDateText(info) {
+function monthDayDate(info) {
     const months = {
       '01': 'Jan',
       '02': 'Feb',
@@ -48,7 +49,7 @@ function formatDateText(info) {
 function CustomXAxisTick({x, y, _, payload}) {
     return(
         <g transform={`translate(${x}, ${y})`}>
-        <text x={0} y={0} dy={5} fontSize='12px' textAnchor="end" transform="rotate(-35)">{formatDateText(payload.value)}</text>
+        <text x={0} y={0} dy={5} fontSize='12px' textAnchor="end" transform="rotate(-35)">{monthDayDate(payload.value)}</text>
         </g>
     );
 }
@@ -56,11 +57,12 @@ function CustomXAxisTick({x, y, _, payload}) {
 function CustomTooltip({ active, payload, label }) {
     if (active) {
         return (
-        <div className="custom-tooltip">
-            <p className="tooltip-date-description">{`${formatDateText(label)}: ${payload[0].payload.description}`}</p>
+        <div className={`custom-tooltip colors-${payload[0].payload.index}`}>
+            <p className="tooltip-date">{monthDayYearDate(label)}</p>
+            <p className="tooltip-description">{payload[0].payload.description}</p>
             <p className="tooltip-duration">{`${payload[0].value} minutes`}</p>
             {payload[0].payload.heart_rate
-                ? <p className="tooltip-duration">{`${payload[0].payload.heart_rate} bpm`}</p>
+                ? <p className="tooltip-heart-rate">{`${payload[0].payload.heart_rate} bpm`}</p>
                 : null
             }
         </div>
