@@ -1,5 +1,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
+import { Heading } from "@chakra-ui/react"
 import { AddExerciseEvent } from './components/AddExerciseEvent';
 import { DataAverages } from './components/DataAverages';
 import { ViewRecentExerciseData } from './components/ViewRecentExerciseData';
@@ -133,6 +134,7 @@ export function App() {
       ? <div>Loading...</div> 
       : 
     <div className="App">
+      <Heading>Exercise Tracker</Heading>
       <AddExerciseEvent { ...{exerciseTypes, postNewExerciseEvent, getUnusedExerciseTypes, unusedExerciseTypes, editExerciseTypesInDB} }/>
       <DataAverages {...{averages}}/>
       <ViewRecentExerciseData {...{last20} }/>
