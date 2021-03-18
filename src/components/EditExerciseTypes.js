@@ -1,15 +1,26 @@
 import { useState } from 'react';
+import { 
+  Button,
+  CloseButton,
+  Container,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Heading,
+  HStack,
+  Input,
+  Select
+} from "@chakra-ui/react"
 
 export function EditExerciseTypes({unusedExerciseTypes, editExerciseTypesInDB, setShowEditExerciseTypes}) {
     const [idsToRemove, setIdsToRemove] = useState();
     const [workoutsToAdd, setWorkoutsToAdd] = useState();
   
     let selectSize = unusedExerciseTypes.length < 3
-      ? unusedExerciseTypes.length
-      : 3;
+      ? unusedExerciseTypes.length * 25
+      : 75;
     
-    function handleSubmit(event) {
-      event.preventDefault();
+    function handleSubmit() {
       let data = {};
       if (idsToRemove) {
         data.toRemove = idsToRemove;
@@ -18,34 +29,34 @@ export function EditExerciseTypes({unusedExerciseTypes, editExerciseTypesInDB, s
         data.toAdd = workoutsToAdd;
       }
       editExerciseTypesInDB(data);
-      console.log(data);
       setShowEditExerciseTypes(false);
     }
-  
+
     return(
-      <div id="edit-exercise-types-container">
-        <div className="form-title">Edit your workout types</div>
-        <form onSubmit={e => handleSubmit(e)}>
-          <input type="button" className="close-form" aria-label="close edit workout types form" value="X" onClick={() => setShowEditExerciseTypes(false)} />
-          <label htmlFor="select-to-remove">
-            Choose which workout types to remove:
-          </label>
-          <select id="select-to-remove" 
-            multiple 
+      <Container centerContent id="edit-exercise-types-container">
+        <HStack>
+          <CloseButton onClick={() => setShowEditExerciseTypes(false)} />
+          <Heading size="md">Edit your workout types</Heading>
+        </HStack>
+        <FormControl>
+            <FormLabel>Choose which workout types to remove</FormLabel>
+            <Select multiple 
             value={idsToRemove}
-            size={selectSize} 
-            onChange={e => setIdsToRemove(Array.from(e.target.selectedOptions, option => option.value))}>
+            maxWidth="45%"
+            height={selectSize} 
+            onChange={e => setIdsToRemove(Array.from(e.target.selectedOptions, option => option.value))}
+            >
             {unusedExerciseTypes.map(entry => 
               <option key={entry.id} value={entry.id}>{entry.description}</option>
-            )}
-          </select>
-          <div id="note">*Workouts already in use cannot be removed</div>
-          <label htmlFor="add-exercise-types">
-            Add your own workouts (if adding multiple, separate by a comma and space, e.g. "rock climbing, HIIT")
-          </label>
-          <input type="text" id="add-exercise-types" onChange={e => setWorkoutsToAdd(e.target.value)} />
-          <input type="submit" id="submit-exercise-type-changes" value="Submit" />
-        </form>
-      </div>
+            )}</Select>
+            <FormHelperText>Workouts already in use cannot be removed</FormHelperText>
+        </FormControl>
+        <FormControl>
+          <FormLabel>Add workout(s)</FormLabel>
+          <Input type="text" maxWidth="45%" onChange={e => setWorkoutsToAdd(e.target.value)}></Input>
+          <FormHelperText>When adding multiple, separate by a comma e.g. "rock climbing, HIIT"</FormHelperText>
+        </FormControl>
+        <Button type="submit" onClick={() => handleSubmit()}>Submit</Button>
+      </Container>
     );
 }
