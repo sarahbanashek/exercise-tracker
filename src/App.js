@@ -28,7 +28,12 @@ export function App() {
         const data = await fetch(`${URL_BASE}/`, { method: 'GET', redirect: 'follow' });
         const dbData = await data.json();
         console.dir(dbData);
-        const avgs = {duration: dbData.durationAvg, heartRate: dbData.heartRateAvg};
+        const avgs = {
+          totalDuration: dbData.durationAvg,
+          untilLastWeekDuration: dbData.untilLastWeekDurationAvg,
+          totalHeartRate: dbData.heartRateAvg,
+          untilLastWeekHeartRate: dbData.untilLastWeekHeartRateAvg
+        };
         setExerciseTypes(dbData.exerciseTypes);
         setAverages(avgs);
         setLast20(dbData.last20);

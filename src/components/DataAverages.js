@@ -1,12 +1,43 @@
+import {
+  Stat,
+  StatLabel,
+  StatNumber,
+  StatHelpText,
+  StatArrow,
+  StatGroup,
+} from "@chakra-ui/react"
+
 export function DataAverages({averages}) {
+
     return (
-      <div id="display data averages">
-        <div id="avg-workout-length">
-          Your average workout length is {averages.duration} minutes.
-        </div>
-        <div id="avg-heart-rate">
-          Your average heart rate is {averages.heartRate} beats per minute.
-        </div>
-      </div>
+      <StatGroup>
+        <Stat>
+          <StatLabel>Average Workout Length</StatLabel>
+          <StatNumber>{averages.totalDuration}</StatNumber>
+          <StatHelpText>minutes</StatHelpText>
+          <StatHelpText>
+            <StatArrow type={averages.totalDuration > averages.untilLastWeekDuration
+                              ? 'increase'
+                              : 'decrease'
+                            } />
+            {(100 * Math.abs(averages.totalDuration - averages.untilLastWeekDuration) / averages.untilLastWeekDuration).toFixed(2)}% this week
+          </StatHelpText>
+        </Stat>
+
+        <Stat>
+          <StatLabel>Average Heart Rate</StatLabel>
+          <StatNumber>{averages.totalHeartRate}</StatNumber>
+          <StatHelpText>
+            beats per minute
+          </StatHelpText>
+          <StatHelpText>
+            <StatArrow type={averages.totalHeartRate > averages.untilLastWeekHeartRate
+                              ? 'increase'
+                              : 'decrease'
+                            } />
+            {(100 * Math.abs(averages.totalHeartRate - averages.untilLastWeekHeartRate) / averages.untilLastWeekHeartRate).toFixed(2)}% this week
+          </StatHelpText>
+        </Stat>
+      </StatGroup>
     )
 }
