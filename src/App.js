@@ -1,6 +1,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import { Button, Heading } from "@chakra-ui/react"
+import { Button, Divider, Heading, VStack } from "@chakra-ui/react"
 import { AddExerciseEvent } from './components/AddExerciseEvent';
 import { DataAverages } from './components/DataAverages';
 import { ViewRecentExerciseData } from './components/ViewRecentExerciseData';
@@ -134,27 +134,31 @@ export function App() {
     !hasLoaded 
       ? <div>Loading...</div> 
       : 
-    <div className="App">
+    <div id="App">
       <Heading>Exercise Tracker</Heading>
-      {showAddNewExerciseEvent 
-        ? <AddExerciseEvent { ...{setShowAddNewExerciseEvent, exerciseTypes, postNewExerciseEvent, getUnusedExerciseTypes, unusedExerciseTypes, editExerciseTypesInDB} }/>
-        : <Button onClick={() => setShowAddNewExerciseEvent(true)}>Add a New Workout</Button>
-      }
+      <VStack id="button-stack" spacing={5}>
+        {showAddNewExerciseEvent 
+          ? <AddExerciseEvent { ...{setShowAddNewExerciseEvent, exerciseTypes, postNewExerciseEvent, getUnusedExerciseTypes, unusedExerciseTypes, editExerciseTypesInDB} }/>
+          : <Button onClick={() => setShowAddNewExerciseEvent(true)}>Add a New Workout</Button>
+        }
+        {showAllExerciseEvents && listAllExerciseEvents
+          ? <ViewAllWorkouts {...{listAllExerciseEvents, toggleShowExerciseEvents}} />
+          : <Button onClick={() => toggleShowExerciseEvents(true, 'view')}>
+              View Your Workout Log
+            </Button>
+        }
+        {showExerciseEventsToDelete && listAllExerciseEvents
+          ? <DeleteExerciseEvents {...{listAllExerciseEvents, toggleShowExerciseEvents, deleteExerciseEvents}} />
+          : <Button onClick={() => toggleShowExerciseEvents(true, 'delete')}>
+              Delete a Workout From Your Log
+            </Button>
+        }
+      </VStack>
+      <Divider />
       <DataAverages {...{averages}}/>
+      <Divider />
       <ViewRecentExerciseData {...{last20} }/>
       <ViewExerciseTypesData {...{loggedExerciseTypes, loggedExerciseTimeSpent}} />
-      {showAllExerciseEvents && listAllExerciseEvents
-        ? <ViewAllWorkouts {...{listAllExerciseEvents, toggleShowExerciseEvents}} />
-        : <button className="show-exercise-events-button" onClick={() => toggleShowExerciseEvents(true, 'view')}>
-            <span>View Your Workout Log</span>
-          </button>
-      }
-      {showExerciseEventsToDelete && listAllExerciseEvents
-        ? <DeleteExerciseEvents {...{listAllExerciseEvents, toggleShowExerciseEvents, deleteExerciseEvents}} />
-        : <button className="show-exercise-events-button" onClick={() => toggleShowExerciseEvents(true, 'delete')}>
-            <span>Delete a Workout From Your Log</span>
-          </button>
-      }
     </div>
   );
 }
