@@ -136,27 +136,27 @@ export function App() {
       : 
     <div id="App">
       <Heading>Exercise Tracker</Heading>
-      <VStack id="button-stack" spacing={5}>
+      <VStack id="button-stack" p={10} spacing={5}>
         {showAddNewExerciseEvent 
           ? <AddExerciseEvent { ...{setShowAddNewExerciseEvent, exerciseTypes, postNewExerciseEvent, getUnusedExerciseTypes, unusedExerciseTypes, editExerciseTypesInDB} }/>
-          : <Button onClick={() => setShowAddNewExerciseEvent(true)}>Add a New Workout</Button>
+          : <Button colorScheme="teal" onClick={() => setShowAddNewExerciseEvent(true)}>Add a New Workout</Button>
         }
         {showAllExerciseEvents && listAllExerciseEvents
           ? <ViewAllWorkouts {...{listAllExerciseEvents, toggleShowExerciseEvents}} />
-          : <Button onClick={() => toggleShowExerciseEvents(true, 'view')}>
+          : <Button colorScheme="blue" onClick={() => toggleShowExerciseEvents(true, 'view')}>
               View Your Workout Log
             </Button>
         }
         {showExerciseEventsToDelete && listAllExerciseEvents
           ? <DeleteExerciseEvents {...{listAllExerciseEvents, toggleShowExerciseEvents, deleteExerciseEvents}} />
-          : <Button onClick={() => toggleShowExerciseEvents(true, 'delete')}>
+          : <Button colorScheme="pink" onClick={() => toggleShowExerciseEvents(true, 'delete')}>
               Delete a Workout From Your Log
             </Button>
         }
       </VStack>
-      <Divider />
+      <Divider border="2px" borderColor="purple.100" />
       <DataAverages {...{averages}}/>
-      <Divider />
+      <Divider border="2px" borderColor="purple.100" />
       <ViewRecentExerciseData {...{last20} }/>
       <ViewExerciseTypesData {...{loggedExerciseTypes, loggedExerciseTimeSpent}} />
     </div>

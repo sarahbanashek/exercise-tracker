@@ -10,7 +10,7 @@ import {
 export function DataAverages({averages}) {
 
     return (
-      <StatGroup>
+      <StatGroup p={5}>
         <Stat>
           <StatLabel>Average Workout Length</StatLabel>
           <StatNumber>{averages.totalDuration}</StatNumber>
@@ -39,5 +39,5 @@ export function DataAverages({averages}) {
           </StatHelpText>
         </Stat>
       </StatGroup>
-    )
+    );
 }
