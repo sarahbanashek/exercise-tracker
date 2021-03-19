@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { monthDayYearDate } from '../utilities/monthDayYearDate';
 
-export function EditExerciseEvents({listAllExerciseEvents, toggleShowExerciseEvents, deleteExerciseEvents}) {
+export function DeleteExerciseEvents({listAllExerciseEvents, toggleShowExerciseEvents, deleteExerciseEvents}) {
     const [toDelete, setToDelete] = useState(new Map(listAllExerciseEvents.map(e => [e.id, false])));
   
     function toggleDeleteWorkout(event, id) {

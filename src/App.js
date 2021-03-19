@@ -1,12 +1,12 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import { Heading } from "@chakra-ui/react"
+import { Button, Heading } from "@chakra-ui/react"
 import { AddExerciseEvent } from './components/AddExerciseEvent';
 import { DataAverages } from './components/DataAverages';
 import { ViewRecentExerciseData } from './components/ViewRecentExerciseData';
 import { ViewExerciseTypesData } from './components/ViewExerciseTypesData';
 import { ViewAllWorkouts } from './components/ViewAllWorkouts';
-import { EditExerciseEvents } from './components/EditExerciseEvents';
+import { DeleteExerciseEvents } from './components/DeleteExerciseEvents';
 
 const URL_BASE = 'http://localhost:3001';
 
@@ -20,6 +20,7 @@ export function App() {
   const [hasSubmittedData, setHasSubmittedData] = useState(0);
   const [unusedExerciseTypes, setUnusedExerciseTypes] = useState();
   const [listAllExerciseEvents, setListAllExerciseEvents] = useState();
+  const [showAddNewExerciseEvent, setShowAddNewExerciseEvent] = useState(false);
   const [showAllExerciseEvents, setShowAllExerciseEvents] = useState(false);
   const [showExerciseEventsToDelete, setShowExerciseEventsToDelete] = useState(false);
 
@@ -135,7 +136,10 @@ export function App() {
       : 
     <div className="App">
       <Heading>Exercise Tracker</Heading>
-      <AddExerciseEvent { ...{exerciseTypes, postNewExerciseEvent, getUnusedExerciseTypes, unusedExerciseTypes, editExerciseTypesInDB} }/>
+      {showAddNewExerciseEvent 
+        ? <AddExerciseEvent { ...{setShowAddNewExerciseEvent, exerciseTypes, postNewExerciseEvent, getUnusedExerciseTypes, unusedExerciseTypes, editExerciseTypesInDB} }/>
+        : <Button onClick={() => setShowAddNewExerciseEvent(true)}>Add a New Workout</Button>
+      }
       <DataAverages {...{averages}}/>
       <ViewRecentExerciseData {...{last20} }/>
       <ViewExerciseTypesData {...{loggedExerciseTypes, loggedExerciseTimeSpent}} />
@@ -146,7 +150,7 @@ export function App() {
           </button>
       }
       {showExerciseEventsToDelete && listAllExerciseEvents
-        ? <EditExerciseEvents {...{listAllExerciseEvents, toggleShowExerciseEvents, deleteExerciseEvents}} />
+        ? <DeleteExerciseEvents {...{listAllExerciseEvents, toggleShowExerciseEvents, deleteExerciseEvents}} />
         : <button className="show-exercise-events-button" onClick={() => toggleShowExerciseEvents(true, 'delete')}>
             <span>Delete a Workout From Your Log</span>
           </button>
