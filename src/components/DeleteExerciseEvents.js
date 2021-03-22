@@ -1,43 +1,80 @@
 import { useState } from 'react';
-import { monthDayYearDate } from '../utilities/monthDayYearDate';
+import { 
+  Box,
+  Button,
+  Checkbox,
+  CheckboxGroup,
+  CloseButton,
+  FormControl,
+  FormHelperText,
+  Heading,
+  HStack,
+  Stack,
+  StackDivider,
+  VStack 
+} from "@chakra-ui/react";
+import { numericalDate } from '../utilities/numericalDate';
+
+const borderColor = 'pink.400';
+const closeButtonColor = 'pink.700';
+const colorScheme = 'pink';
 
 export function DeleteExerciseEvents({listAllExerciseEvents, toggleShowExerciseEvents, deleteExerciseEvents}) {
     const [toDelete, setToDelete] = useState(new Map(listAllExerciseEvents.map(e => [e.id, false])));
   
-    function toggleDeleteWorkout(event, id) {
-      event.preventDefault();
+    function toggleDeleteWorkout(id) {
       const isSelected = toDelete.get(id);
       setToDelete(previous => new Map(previous).set(id, !isSelected));
+      console.log(isSelected);
     }
   
-    function handleSubmit(event) {
-      event.preventDefault();
+    function handleSubmit() {
+      console.log(toDelete);
       const idsToDelete = [...toDelete.entries()].filter(([_, val]) => val).map(([key, _]) => key);
       deleteExerciseEvents(idsToDelete);
       toggleShowExerciseEvents(false, 'delete');
+      console.log(idsToDelete);
     }
   
     return (
-      <div id="delete-exercise-events-container">
-        <input type="button" className="close-form" aria-label="close the delete workouts form" value="X" onClick={() => toggleShowExerciseEvents(false, 'delete')} />
-        <div className="form-title">Choose which workout(s) to delete</div>
-        <form onSubmit={e => handleSubmit(e)}>
-          <label htmlFor="select-workouts-to-delete" />
-          <div id="select-workouts-to-delete">
-            {listAllExerciseEvents.map(e =>
-              <button key={'exercise-event-' + e.id} 
-                      value={toDelete.get(e.id)} 
-                      onClick={(event) => toggleDeleteWorkout(event, e.id)}
-                      className={'delete-workout-button' + (toDelete.get(e.id) ? 'selected-workout' : '')} >
-                <span>{monthDayYearDate(e.date)}</span>
-                <span>{e.description}</span>
-                <span>{e.duration} minutes</span>
-                {e.heart_rate ? <span>{e.heart_rate} bpm</span> : null}
-              </button>
+      <Stack
+        border="2px"
+        borderRadius="lg" 
+        borderColor={borderColor} 
+        variant="outline" 
+        paddingTop={2}
+      >
+        <Stack paddingRight={2} direction="row-reverse">
+          <CloseButton color={closeButtonColor} onClick={() => toggleShowExerciseEvents(false, 'delete')} />
+        </Stack>
+
+        <Heading size="md">Choose which workout(s) to delete</Heading>
+
+        <VStack spacing={7} p={10} >
+          <CheckboxGroup colorScheme={colorScheme}>
+            <Stack spacing={4}>
+              {listAllExerciseEvents.map(e =>
+                <Checkbox key={'exercise-event-' + e.id} 
+                  isChecked={toDelete.get(e.id)} 
+                  onChange={() => toggleDeleteWorkout(e.id)}
+                  height="20px"
+                  spacing={3}
+                >
+                  <HStack divider={<StackDivider borderColor={borderColor} />} spacing={3} h={5}>
+                    <Box d="flex" alignItems="center" h={8}>{numericalDate(e.date)}</Box>
+                    <Box d="flex" alignItems="center" h={8}>{e.description}</Box>
+                    <Box d="flex" alignItems="center" h={8}>{e.duration} minutes</Box>
+                    {e.heart_rate ? <Box d="flex" alignItems="center" h={8}>{e.heart_rate}  bpm</Box> : null}
+                  </HStack>
+                </Checkbox>
               )}
-            <input type="submit" id="submit-exercises-to-delete" value="Delete From Log" />
-          </div>
-        </form>
-      </div> 
+            </Stack>
+          </CheckboxGroup>
+          <FormControl>
+              <Button colorScheme={colorScheme} type="submit" onClick={() => handleSubmit()}>Submit</Button>
+              <FormHelperText color={closeButtonColor}>Warning: This cannot be undone</FormHelperText>
+          </FormControl>
+        </VStack>
+      </Stack> 
     );
 }
