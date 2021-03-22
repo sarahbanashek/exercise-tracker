@@ -18,6 +18,7 @@ import { numericalDate } from '../utilities/numericalDate';
 const borderColor = 'pink.400';
 const closeButtonColor = 'pink.700';
 const colorScheme = 'pink';
+const textColor = 'pink.600'
 
 export function DeleteExerciseEvents({listAllExerciseEvents, toggleShowExerciseEvents, deleteExerciseEvents}) {
     const [toDelete, setToDelete] = useState(new Map(listAllExerciseEvents.map(e => [e.id, false])));
@@ -48,7 +49,7 @@ export function DeleteExerciseEvents({listAllExerciseEvents, toggleShowExerciseE
           <CloseButton color={closeButtonColor} onClick={() => toggleShowExerciseEvents(false, 'delete')} />
         </Stack>
 
-        <Heading size="md">Choose which workout(s) to delete</Heading>
+        <Heading color={textColor} size="md">Choose which workout(s) to delete</Heading>
 
         <VStack spacing={7} p={10} >
           <CheckboxGroup colorScheme={colorScheme}>
@@ -72,7 +73,7 @@ export function DeleteExerciseEvents({listAllExerciseEvents, toggleShowExerciseE
           </CheckboxGroup>
           <FormControl>
               <Button colorScheme={colorScheme} type="submit" onClick={() => handleSubmit()}>Submit</Button>
-              <FormHelperText color={closeButtonColor}>Warning: This cannot be undone</FormHelperText>
+              <FormHelperText color={textColor}>Warning: This cannot be undone</FormHelperText>
           </FormControl>
         </VStack>
       </Stack> 

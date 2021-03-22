@@ -19,6 +19,11 @@ import {
 } from '@chakra-ui/react';
 import { CalendarIcon } from '@chakra-ui/icons'
 
+const borderColor = 'teal.400';
+const closeButtonColor = 'teal.700';
+const colorScheme = 'teal';
+const textColor = 'teal.700';
+
 export function AddExerciseEvent({setShowAddNewExerciseEvent, exerciseTypes, postNewExerciseEvent, getUnusedExerciseTypes, unusedExerciseTypes, editExerciseTypesInDB}) {
     const [exerciseEventDate, setExerciseEventDate] = useState();
     const [exerciseEventType, setExerciseEventType] = useState(1);
@@ -31,8 +36,6 @@ export function AddExerciseEvent({setShowAddNewExerciseEvent, exerciseTypes, pos
       let today = new Date();
       const offset = today.getTimezoneOffset();
       today = new Date(today.getTime() - (offset * 60000));
-      console.log('today: ' + today);
-      console.log('in reset useEffect');
       setExerciseEventDate(today.toISOString().split('T')[0]);
       setExerciseEventType(1);
       setExerciseEventDuration('');
@@ -63,17 +66,18 @@ export function AddExerciseEvent({setShowAddNewExerciseEvent, exerciseTypes, pos
       <Stack
         border="2px"
         borderRadius="lg" 
-        borderColor="teal.400" 
-        variant="outline" 
+        borderColor={borderColor}
         paddingTop={2} >
         <Stack paddingRight={2} direction="row-reverse">
-            <CloseButton color="teal.700" onClick={() => setShowAddNewExerciseEvent(false)} />   
+            <CloseButton color={closeButtonColor} onClick={() => setShowAddNewExerciseEvent(false)} />   
         </Stack>
+
         <VStack spacing={7}>
-          <Heading size="md">Log your workout below</Heading>
+          <Heading color={textColor} size="md">Log your workout below</Heading>
+          
           <HStack paddingLeft={10} paddingRight={10} spacing={10}>
             <FormControl isRequired>
-              <FormLabel>Date</FormLabel>
+              <FormLabel color={textColor}>Date</FormLabel>
               <InputGroup maxWidth="200px">
                 <InputLeftElement pointerEvents="none" children={<CalendarIcon />} />
                 <Input type="date"
@@ -81,15 +85,19 @@ export function AddExerciseEvent({setShowAddNewExerciseEvent, exerciseTypes, pos
                 placeholder="yyyy-mm-dd"
                 defaultValue={exerciseEventDate}
                 
-                focusBorderColor="teal.400"
+                focusBorderColor={borderColor}
                 onChange={e => setExerciseEventDate(e.target.value)} 
                 />
               </InputGroup>
             </FormControl>
             
             <FormControl isRequired>
-              <FormLabel>Workout Type</FormLabel>
-              <Select focusBorderColor="teal.400" width="max" value={exerciseEventType} onChange={e => handleSetExcerciseType(e.target.value)}>
+              <FormLabel color={textColor}>Workout Type</FormLabel>
+              <Select id="select-workout-type"
+                focusBorderColor={borderColor} 
+                width="max" 
+                value={exerciseEventType} 
+                onChange={e => handleSetExcerciseType(e.target.value)}>
                 {exerciseTypes.map(entry =>
                   <option key={entry.id} value={entry.id}>{entry.description}</option>
                 )}
@@ -100,32 +108,38 @@ export function AddExerciseEvent({setShowAddNewExerciseEvent, exerciseTypes, pos
             
           <HStack paddingLeft={10} paddingRight={10} spacing={10}>
             <FormControl isRequired>
-              <FormLabel>Workout Length</FormLabel>
+              <FormLabel color={textColor}>Workout Length</FormLabel>
               <InputGroup maxWidth="200px">
-                <NumberInput focusBorderColor="teal.400" value={exerciseEventDuration} min={1} onChange={value => setExerciseEventDuration(value)}>
+                <NumberInput focusBorderColor={borderColor} value={exerciseEventDuration} min={1} onChange={value => setExerciseEventDuration(value)}>
                   <NumberInputField />
                 </NumberInput>
-                <InputRightAddon children="minutes" />
+                <InputRightAddon color={textColor} children="minutes" />
               </InputGroup>
             </FormControl>
             
             <FormControl>
-              <FormLabel>Heart Rate</FormLabel>
+              <FormLabel color={textColor}>Heart Rate</FormLabel>
               <InputGroup maxWidth="200px">
-                <NumberInput focusBorderColor="teal.400" value={exerciseEventHeartRate} min={1} onChange={value => setExerciseEventHeartRate(value)}>
+                <NumberInput focusBorderColor={borderColor} value={exerciseEventHeartRate} min={1} onChange={value => setExerciseEventHeartRate(value)}>
                   <NumberInputField />
                 </NumberInput>
-                <InputRightAddon children="bpm" />
+                <InputRightAddon color={textColor} children="bpm" />
               </InputGroup>
             </FormControl>
           </HStack>
             
-          <Stack paddingBottom={10}>
-            <Button colorScheme="teal" type="submit" onClick={() => handleSubmit()}>Submit</Button>
-          </Stack>
           {showEditExerciseTypes && unusedExerciseTypes
-          ? <EditExerciseTypes {...{unusedExerciseTypes, editExerciseTypesInDB, setShowEditExerciseTypes}} />
-          : null
+          ? (
+            <VStack spacing={7}>
+              <Button colorScheme={colorScheme} type="submit" onClick={() => handleSubmit()}>Submit</Button>
+              <EditExerciseTypes {...{unusedExerciseTypes, editExerciseTypesInDB, setShowEditExerciseTypes}} />
+            </VStack>
+            )
+          : (
+            <Stack paddingBottom={10}>
+              <Button colorScheme={colorScheme} type="submit" onClick={() => handleSubmit()}>Submit</Button>
+            </Stack>
+            )
           }
         </VStack>
       </Stack>

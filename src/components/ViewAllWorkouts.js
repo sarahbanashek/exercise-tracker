@@ -11,31 +11,36 @@ import {
 } from "@chakra-ui/react";
 import { monthDayYearDate } from '../utilities/monthDayYearDate';
 
+const borderColor = 'blue.400';
+const closeButtonColor = 'blue.700';
+const colorScheme = 'blue';
+const textColor = 'blue.600';
+
 export function ViewAllWorkouts({listAllExerciseEvents, toggleShowExerciseEvents}) {
     return (
       <Stack
         border="2px"
         borderRadius="lg" 
-        borderColor="blue.400" 
+        borderColor={borderColor} 
         variant="outline" 
         paddingTop={2}>
         <Stack paddingRight={2} direction="row-reverse">
-          <CloseButton color="blue.700" onClick={() => toggleShowExerciseEvents(false, 'view')} />
+          <CloseButton color={closeButtonColor} onClick={() => toggleShowExerciseEvents(false, 'view')} />
         </Stack>
 
-        <Heading size="md">Your Workouts</Heading>
+        <Heading color={textColor} size="md">Your Workouts</Heading>
 
         <Stack p={10}>
-          <Table variant="simple" colorScheme="blue" paddingRight={10}>
+          <Table variant="simple" colorScheme={colorScheme} paddingRight={10}>
             <Thead>
               <Tr key="title-row">
-                  <Th key="date-title" scope="col">Date</Th>
-                  <Th key="type-title" scope="col">Workout Type</Th>
-                  <Th key="duration-title" scope="col">Workout Length</Th>
-                  <Th key="heart-rate-title" scope="col">Heart Rate</Th>
+                  <Th color={textColor} key="date-title" scope="col">Date</Th>
+                  <Th color={textColor} key="type-title" scope="col">Workout Type</Th>
+                  <Th color={textColor} key="duration-title" scope="col">Workout Length</Th>
+                  <Th color={textColor} key="heart-rate-title" scope="col">Heart Rate</Th>
               </Tr>
             </Thead>
-            
+
             <Tbody>  
               {listAllExerciseEvents.map(e => 
               <Tr key={e.id}>
