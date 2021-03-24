@@ -1,12 +1,14 @@
 import { PieChart, Pie, Cell, Tooltip } from 'recharts';
-import { pieChartColors } from '../utilities/colors';
+import { Heading, Stack, Text, VStack } from '@chakra-ui/react';
+import { pieChartColors, tooltipBackgroundColors } from '../utilities/colors';
 
 export function ViewExerciseTypesData({loggedExerciseTypes, loggedExerciseTimeSpent}) {
     return (
-      <div id="view-exercise-types-data">
-        <div id="pie-charts-title">Breakdown of Your Workout Types</div>
-        <div id="frequency-pie-chart">
-            <div className="individual-pie-chart-titles">Number of Times You've Logged Each Workout</div>
+      <Stack id="view-exercise-types-data">
+        <Heading size="md">Breakdown of Your Workout Types</Heading>
+
+        <VStack id="frequency-pie-chart">
+            <Heading size="sm">Number of Times You've Logged Each Workout</Heading>
             <PieChart width={600} height={300}>
                 <Pie data={loggedExerciseTypes} outerRadius="70%" label={entry => entry.description} dataKey="COUNT(exercise_events.id)">
                     {loggedExerciseTypes.map((_, i) => 
@@ -15,32 +17,42 @@ export function ViewExerciseTypesData({loggedExerciseTypes, loggedExerciseTimeSp
                 </Pie>
                 <Tooltip content={<CustomTooltipFrequency />} />
             </PieChart>
-            </div>
-        <div id="total-time-pie-chart">
-            <div className="individual-pie-chart-titles">Time You've Spent on Each Workout</div>
+        </VStack>
+
+        <VStack id="total-time-pie-chart">
+            <Heading size="sm">Time You've Spent on Each Workout</Heading>
             <PieChart width={600} height={300}>
-                <Pie data={loggedExerciseTimeSpent} outerRadius="70%" label={entry => entry.description} nameKey='description' dataKey="SUM(duration)">
+                <Pie data={loggedExerciseTimeSpent} outerRadius="70%" label={entry => entry.description} dataKey="SUM(duration)">
                     {loggedExerciseTimeSpent.map((_, i) => 
                         <Cell key={`cell-${i}`} fill={pieChartColors[i % pieChartColors.length]} />
                     )}
                 </Pie>
                 <Tooltip content={<CustomTooltipTime />} />
             </PieChart>
-            </div>
-      </div>
+        </VStack>
+      </Stack>
     );
 }
+
+const backgroundColorsLength = tooltipBackgroundColors.length;
 
 function CustomTooltipFrequency({ active, payload }) {
     if (active) {
         return (
-        <div className={`custom-tooltip colors-${pieChartColors.indexOf(payload[0].payload.fill)}`}>
-            <p id="tooltip-date-description">{`You've logged ${payload[0].payload.description}`}</p>
+        <VStack 
+            bg={tooltipBackgroundColors[payload[0].name % backgroundColorsLength]}
+            border="2px"
+            borderRadius="lg" 
+            borderColor={payload[0].payload.fill}
+            p={3}
+        >
+            <Text size="sm">You've logged</Text>
+            <Text size="sm">{payload[0].payload.description}</Text>
             {payload[0].value === 1
-                ? <p id="tooltip-duration">{`${payload[0].value} time`}</p>
-                : <p id="tooltip-duration">{`${payload[0].value} times`}</p>
+                ? <Text size="sm">{`${payload[0].value} time`}</Text>
+                : <Text size="sm">{`${payload[0].value} times`}</Text>
             }
-        </div>
+        </VStack>
         );
     }
 
@@ -50,10 +62,16 @@ function CustomTooltipFrequency({ active, payload }) {
 function CustomTooltipTime({ active, payload }) {
     if (active) {
         return (
-        <div className={`custom-tooltip colors-${pieChartColors.indexOf(payload[0].payload.fill)}`}>
-            <p id="tooltip-duration">{`You've logged ${(payload[0].value / 60).toFixed(2)} hours`}</p>
-            <p id="tooltip-date-description">{`of ${payload[0].payload.description}`}</p>
-        </div>
+            <VStack 
+                bg={tooltipBackgroundColors[payload[0].name % backgroundColorsLength]}
+                border="2px"
+                borderRadius="lg" 
+                borderColor={payload[0].payload.fill}
+                p={3}
+            >
+                <Text size="sm">{`You've logged ${(payload[0].value / 60).toFixed(2)} hours`}</Text>
+                <Text size="sm">{`of ${payload[0].payload.description}`}</Text>
+            </VStack>
         );
     }
 
