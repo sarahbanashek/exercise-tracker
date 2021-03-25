@@ -1,3 +1,9 @@
-.App {
+#App {
   text-align: center;
+  margin: 1em auto;
+}
+
+#select-remove-workout-type option:checked {
+  /* color is Green 300 from chakra ui */
+  background:#68D391 linear-gradient(0deg, #68D391 0%, #68D391 100%);
 }
