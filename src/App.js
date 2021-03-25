@@ -1,6 +1,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import { Button, Divider, Heading, VStack } from "@chakra-ui/react"
+import { Button, Divider, Heading, VStack } from "@chakra-ui/react";
 import { AddExerciseEvent } from './components/AddExerciseEvent';
 import { DataAverages } from './components/DataAverages';
 import { ViewRecentExerciseData } from './components/ViewRecentExerciseData';
@@ -29,7 +29,7 @@ export function App() {
       try {
         const data = await fetch(`${URL_BASE}/`, { method: 'GET', redirect: 'follow' });
         const dbData = await data.json();
-        console.dir(dbData);
+        // console.dir(dbData);
         const avgs = {
           totalDuration: dbData.durationAvg,
           untilLastWeekDuration: dbData.untilLastWeekDurationAvg,
@@ -39,8 +39,8 @@ export function App() {
         setExerciseTypes(dbData.exerciseTypes);
         setAverages(avgs);
         setLast20(dbData.last20);
-        setLoggedExerciseTypes(dbData.workoutTypeFrequencies);
-        setLoggedExerciseTimeSpent(dbData.workoutTypeTimeSpent);
+        setLoggedExerciseTypes([dbData.workoutTypeFrequencies, dbData.totalNumOfWorkouts]);
+        setLoggedExerciseTimeSpent([dbData.workoutTypeTimeSpent, dbData.totalTimeAllWorkouts]);
         setHasLoaded(true);
       } catch (error) {
         console.log(error);
@@ -97,7 +97,7 @@ export function App() {
       const data = await fetch(`${URL_BASE}/edit-exercise-events`, { method: 'GET', redirect: 'follow' });
       const dbData = await data.json();
       setListAllExerciseEvents(dbData);
-      console.dir(dbData);
+      // console.dir(dbData);
     } catch (error) {
       console.log(error);
     }
