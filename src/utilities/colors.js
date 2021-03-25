@@ -17,8 +17,6 @@ export const tooltipBorderColors = [
     '#2C7A7B',
     // green 600
     '#2F855A',
-    // yellow 400
-    '#ECC94B',
     // orange 500
     '#DD6B20'
 ]
@@ -36,8 +34,6 @@ export const tooltipBackgroundColors = [
     '#E6FFFA',
     // green 50
     '#F0FFF4',
-    // yellow 50
-    '#FFFFF0',
     // orange 50
     '#FFFAF0',
 ]
@@ -55,8 +51,6 @@ export const pieChartColors = [
     '#38B2AC',
     // green 400
     '#48BB78',
-    // yellow 400
-    '#ECC94B',
     // orange 400
     '#ED8936',
     // pink 500

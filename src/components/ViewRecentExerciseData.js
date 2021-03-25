@@ -114,10 +114,10 @@ function CustomTooltip({ active, payload, label }) {
   if (active) {
     return (
       <VStack 
-        bg={tooltipBackgroundColors[payload[0].payload.index % 8]}
+        bg={tooltipBackgroundColors[payload[0].payload.index % tooltipBackgroundColors.length]}
         border="2px"
         borderRadius="lg" 
-        borderColor={tooltipBorderColors[payload[0].payload.index % 8]} 
+        borderColor={tooltipBorderColors[payload[0].payload.index % tooltipBorderColors.length]} 
         p={3}
       >
         {/* date */}
