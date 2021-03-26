@@ -10,15 +10,17 @@ import {
   Select,
   Stack,
   VStack
-} from "@chakra-ui/react"
+} from '@chakra-ui/react';
 
 export function EditExerciseTypes({unusedExerciseTypes, editExerciseTypesInDB, setShowEditExerciseTypes}) {
   const [idsToRemove, setIdsToRemove] = useState();
   const [workoutsToAdd, setWorkoutsToAdd] = useState();
 
-  let selectSize = unusedExerciseTypes.length < 3
-    ? unusedExerciseTypes.length * 25
-    : 75;
+  let selectSize = unusedExerciseTypes.length > 2
+    ? 75 
+    : unusedExerciseTypes.length === 0
+      ? 'n/a'
+      : unusedExerciseTypes.length * 25;
   
   function handleSubmit() {
     let data = {};
@@ -55,7 +57,9 @@ export function EditExerciseTypes({unusedExerciseTypes, editExerciseTypesInDB, s
       <VStack spacing={7} paddingLeft={5} paddingRight={5}>
         <Heading color={textColor} size="md">Edit workout types</Heading>
         
-        <FormControl  align="center">
+        {selectSize !== 'n/a'
+          ? (
+          <FormControl  align="center"> 
             <FormLabel textAlign="center" color={textColor}>Choose which workout type(s) to remove</FormLabel>
             <Select id="select-remove-workout-type"
             multiple 
@@ -72,7 +76,10 @@ export function EditExerciseTypes({unusedExerciseTypes, editExerciseTypesInDB, s
             )}
             </Select>
             <FormHelperText color={textColor}>Workout types already in use cannot be removed</FormHelperText>
-        </FormControl>
+          </FormControl>
+          )
+          : null
+        }
 
         <FormControl>
           <FormLabel textAlign="center" color={textColor}>Add workout type(s)</FormLabel>
