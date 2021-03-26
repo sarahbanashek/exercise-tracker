@@ -1,8 +1,8 @@
 // colors from chakra ui default color themes
 
 export const durationColor = '#00B5D8';  // cyan 500
-
 export const heartRateColor = '#D53F8C';  // pink 500
+export const xAxisColor = '#553C9A';    // purple 700
 
 export const tooltipBorderColors = [
     // pink 600

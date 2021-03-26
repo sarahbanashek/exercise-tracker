@@ -1,5 +1,5 @@
 import { ResponsiveContainer, LineChart, XAxis, YAxis, Line, Tooltip, Label } from 'recharts';
-import { durationColor, heartRateColor, tooltipBorderColors, tooltipBackgroundColors } from '../utilities/colors';
+import { durationColor, heartRateColor, xAxisColor, tooltipBorderColors, tooltipBackgroundColors } from '../utilities/colors';
 import { Heading, Text, VStack } from '@chakra-ui/react';
 import { monthDayYearDate } from '../utilities/monthDayYearDate';
 
@@ -13,8 +13,8 @@ export function ViewRecentExerciseData({last20}) {
             <XAxis 
               dataKey="date" 
               reversed padding={{left: 15, right: 15}} 
-              axisLine={{stroke: 'black'}} 
-              tickLine={{stroke: 'black'}} 
+              axisLine={{stroke: xAxisColor}} 
+              tickLine={{stroke: xAxisColor}} 
               tick={<CustomXAxisTick />}
             >
               <Label value="Date" 
