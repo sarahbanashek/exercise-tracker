@@ -42,7 +42,7 @@ export function ViewAllWorkouts({listAllExerciseEvents, toggleShowExerciseEvents
 
         <Heading color={textColor} size="md">Your Workouts</Heading>
 
-        <Stack align="center" spacing={5} p={10}>
+        <Stack align="center" spacing={5} paddingTop={5} paddingRight={10} paddingBottom={10} paddingLeft={10}>
           <Table variant="simple" colorScheme={colorScheme} paddingRight={10}>
             <Thead>
               <Tr key="title-row">

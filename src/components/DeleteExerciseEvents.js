@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Box,
   Button,
@@ -30,8 +30,19 @@ function pagination(dataSet, pageNum, amtPerPage) {
 export function DeleteExerciseEvents({listAllExerciseEvents, toggleShowExerciseEvents, deleteExerciseEvents}) {
     const [toDelete, setToDelete] = useState(new Map(listAllExerciseEvents.map(e => [e.id, false])));
     const [currentPage, setCurrentPage] = useState(1);
+    const [descriptionBoxWidths, setDescriptionBoxWidths] = useState();
 
-    const resultsPerPage = 10;
+    useEffect(() => {
+      function calculateDescriptionBoxWidths(dataSet) {
+        let descriptionsArr = [];
+        dataSet.map(obj => descriptionsArr.push(obj.description));
+        descriptionsArr.sort((a, b) => b.length - a.length);
+        return descriptionsArr[0].length * 8;
+      }
+      setDescriptionBoxWidths(calculateDescriptionBoxWidths(listAllExerciseEvents));
+    }, [listAllExerciseEvents]);
+    
+    const resultsPerPage = 15;
     const numOfPages = Math.ceil(listAllExerciseEvents.length / resultsPerPage);
   
     function toggleDeleteWorkout(id) {
@@ -60,7 +71,7 @@ export function DeleteExerciseEvents({listAllExerciseEvents, toggleShowExerciseE
 
         <Heading color={textColor} size="md">Choose which workout(s) to delete</Heading>
 
-        <VStack spacing={7} p={10} >
+        <VStack spacing={7} paddingTop={5} paddingRight={10} paddingBottom={10} paddingLeft={10}>
           <CheckboxGroup colorScheme={colorScheme}>
             <Stack spacing={4}>
               {pagination(listAllExerciseEvents, currentPage, resultsPerPage).map(e =>
@@ -71,9 +82,9 @@ export function DeleteExerciseEvents({listAllExerciseEvents, toggleShowExerciseE
                   spacing={3}
                 >
                   <HStack divider={<StackDivider borderColor={borderColor} />} spacing={3} h={5}>
-                    <Box d="flex" alignItems="center" h={8}>{numericalDate(e.date)}</Box>
-                    <Box d="flex" alignItems="center" h={8}>{e.description}</Box>
-                    <Box d="flex" alignItems="center" h={8}>{e.duration} minutes</Box>
+                    <Box d="flex" alignItems="center" w="80px" h={8}>{numericalDate(e.date)}</Box>
+                    <Box d="flex" alignItems="center" w={`${descriptionBoxWidths}px`} h={8}>{e.description}</Box>
+                    <Box d="flex" alignItems="center" w="95px" h={8}>{e.duration} minutes</Box>
                     {e.heart_rate ? <Box d="flex" alignItems="center" h={8}>{e.heart_rate}  bpm</Box> : null}
                   </HStack>
                 </Checkbox>

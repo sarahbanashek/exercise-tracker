@@ -39,7 +39,7 @@ export function ViewExerciseTypesData({ loggedExerciseTypes, loggedExerciseTimeS
                         borderColor={payload[0].payload.fill}
                         p={3}
                     >
-                        <Text size="sm">Less than {frequencyTenPercent} each:</Text>
+                        <Text size="sm">Less than {frequencyTenPercent} times each:</Text>
                         {frequencyOthers.map(type => <Text size="sm" key={type}>{type}</Text>)}
                     </VStack>)
                 : (
@@ -115,6 +115,7 @@ export function ViewExerciseTypesData({ loggedExerciseTypes, loggedExerciseTimeS
                                 dataKey="COUNT(exercise_events.id)"
                                 startAngle={90}
                                 endAngle={450}
+                                isAnimationActive={false}
                             >
                                 {frequencyFinal.map((_, i) => 
                                     <Cell key={`cell-${i}`} fill={pieChartColors[i % pieChartColors.length]} />
@@ -136,6 +137,7 @@ export function ViewExerciseTypesData({ loggedExerciseTypes, loggedExerciseTimeS
                                 dataKey="SUM(duration)"
                                 startAngle={90}
                                 endAngle={450}
+                                isAnimationActive={false}
                             >
                                 {timeFinal.map((_, i) => 
                                     <Cell key={`cell-${i}`} fill={pieChartColors[i % pieChartColors.length]} />
