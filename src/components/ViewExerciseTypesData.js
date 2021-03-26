@@ -2,30 +2,40 @@ import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 import { Heading, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
 import { pieChartColors, tooltipBackgroundColors } from '../utilities/colors';
 
+const backgroundColorsLength = tooltipBackgroundColors.length;
+
 export function ViewExerciseTypesData({ loggedExerciseTypes, loggedExerciseTimeSpent }) {
     const frequencyTenPercent = (loggedExerciseTypes[1]['COUNT(exercise_events.id)'] * 0.1).toFixed(0);
-    let frequencyOthers = [];
-    let frequencyFinal = [{description: 'other', 'COUNT(exercise_events.id)': 0 }];
+    let frequencyOthersDescriptions = [];
+    let frequencyOthersCount = 0;
+    let frequencyFinal = [];
     loggedExerciseTypes[0].forEach(obj => {
         if (obj['COUNT(exercise_events.id)'] >= frequencyTenPercent) {
             frequencyFinal.push(obj);
         } else {
-            frequencyOthers.push(obj.description);
-            frequencyFinal[0]['COUNT(exercise_events.id)'] += obj['COUNT(exercise_events.id)'];
+            frequencyOthersDescriptions.push(obj.description);
+            frequencyOthersCount++;
         }
     });
+    if (frequencyOthersCount > 0) {
+        frequencyFinal.unshift({description: 'other', 'COUNT(exercise_events.id)': frequencyOthersCount });
+    }
 
     // const timeTenPercent = (loggedExerciseTimeSpent[1]['SUM(duration)'] * 0.1).toFixed(0);
-    let timeOthers = [];
-    let timeFinal = [{description: 'other', 'SUM(duration)': 0}];
+    let timeOthersDescriptions = [];
+    let timeOthersCount = 0;
+    let timeFinal = [];
     loggedExerciseTimeSpent[0].forEach(obj => {
         if (obj['SUM(duration)'] >= 120) {
             timeFinal.push(obj);
         } else {
-            timeOthers.push(obj.description);
-            timeFinal[0]['SUM(duration)'] += obj['SUM(duration)'];
+            timeOthersDescriptions.push(obj.description);
+            timeOthersCount += obj['SUM(duration)'];
         }
-    })
+    });
+    if (timeOthersCount > 0) {
+        timeFinal.unshift({description: 'other', 'SUM(duration)': timeOthersCount});
+    }
     
     function CustomTooltipFrequency({ active, payload }) {
         if (active) {
@@ -40,7 +50,7 @@ export function ViewExerciseTypesData({ loggedExerciseTypes, loggedExerciseTimeS
                         p={3}
                     >
                         <Text size="sm">Less than {frequencyTenPercent} times each:</Text>
-                        {frequencyOthers.map(type => <Text size="sm" key={type}>{type}</Text>)}
+                        {frequencyOthersDescriptions.map(type => <Text size="sm" key={type}>{type}</Text>)}
                     </VStack>)
                 : (
                     <VStack 
@@ -78,7 +88,7 @@ export function ViewExerciseTypesData({ loggedExerciseTypes, loggedExerciseTimeS
                     >
                         {/* <Text size="sm">Less than {(timeTenPercent / 60).toFixed(2)} hours each:</Text> */}
                         <Text size="sm">Less than 2 hours each:</Text>
-                        {timeOthers.map(type => <Text size="sm" key={type}>{type}</Text>)}
+                        {timeOthersDescriptions.map(type => <Text size="sm" key={type}>{type}</Text>)}
                     </VStack>
                 )
                 : (
@@ -151,5 +161,3 @@ export function ViewExerciseTypesData({ loggedExerciseTypes, loggedExerciseTimeS
         </VStack>
     );
 }
-
-const backgroundColorsLength = tooltipBackgroundColors.length;
