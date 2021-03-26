@@ -29,14 +29,13 @@ export function App() {
       try {
         const data = await fetch(`${URL_BASE}/`, { method: 'GET', redirect: 'follow' });
         const dbData = await data.json();
-        // console.dir(dbData);
         const avgs = {
           totalDuration: dbData.durationAvg,
           untilLastWeekDuration: dbData.untilLastWeekDurationAvg,
           totalHeartRate: dbData.heartRateAvg,
           untilLastWeekHeartRate: dbData.untilLastWeekHeartRateAvg
         };
-        setExerciseTypes(dbData.exerciseTypes);
+
         setAverages(avgs);
         setLast20(dbData.last20);
         setLoggedExerciseTypes([dbData.workoutTypeFrequencies, dbData.totalNumOfWorkouts]);
@@ -48,6 +47,23 @@ export function App() {
     };
     loadData();
   }, [hasSubmittedData]);
+
+  async function getAllWorkoutTypes() {
+    try {
+      const data = await fetch(`${URL_BASE}/add-exercise-event`, { method: 'GET', redirect: 'follow'});
+      const dbData = await data.json();
+      setExerciseTypes(dbData);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  function toggleShowAddNewWorkout(bool) {
+    if (bool) {
+      getAllWorkoutTypes();
+    }
+    setShowAddNewExerciseEvent(bool);
+  }
 
   async function postNewExerciseEvent(eventData) {
     const response = await fetch(`${URL_BASE}/add-exercise-event`, {
@@ -97,7 +113,6 @@ export function App() {
       const data = await fetch(`${URL_BASE}/edit-exercise-events`, { method: 'GET', redirect: 'follow' });
       const dbData = await data.json();
       setListAllExerciseEvents(dbData);
-      // console.dir(dbData);
     } catch (error) {
       console.log(error);
     }
@@ -137,9 +152,9 @@ export function App() {
     <div id="App">
       <Heading>Exercise Tracker</Heading>
       <VStack id="button-stack" p={10} spacing={5}>
-        {showAddNewExerciseEvent 
-          ? <AddExerciseEvent { ...{setShowAddNewExerciseEvent, exerciseTypes, postNewExerciseEvent, getUnusedExerciseTypes, unusedExerciseTypes, editExerciseTypesInDB} }/>
-          : <Button colorScheme="teal" onClick={() => setShowAddNewExerciseEvent(true)}>Add a New Workout</Button>
+        {showAddNewExerciseEvent && exerciseTypes
+          ? <AddExerciseEvent { ...{toggleShowAddNewWorkout, exerciseTypes, postNewExerciseEvent, getUnusedExerciseTypes, unusedExerciseTypes, editExerciseTypesInDB} }/>
+          : <Button colorScheme="teal" onClick={() => toggleShowAddNewWorkout(true)}>Add a New Workout</Button>
         }
         {showAllExerciseEvents && listAllExerciseEvents
           ? <ViewAllWorkouts {...{listAllExerciseEvents, toggleShowExerciseEvents}} />

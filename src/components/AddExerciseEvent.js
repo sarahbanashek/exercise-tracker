@@ -24,7 +24,7 @@ const closeButtonColor = 'teal.700';
 const colorScheme = 'teal';
 const textColor = 'teal.700';
 
-export function AddExerciseEvent({setShowAddNewExerciseEvent, exerciseTypes, postNewExerciseEvent, getUnusedExerciseTypes, unusedExerciseTypes, editExerciseTypesInDB}) {
+export function AddExerciseEvent({toggleShowAddNewWorkout, exerciseTypes, postNewExerciseEvent, getUnusedExerciseTypes, unusedExerciseTypes, editExerciseTypesInDB}) {
     const [exerciseEventDate, setExerciseEventDate] = useState();
     const [exerciseEventType, setExerciseEventType] = useState(1);
     const [exerciseEventDuration, setExerciseEventDuration] = useState();
@@ -59,7 +59,7 @@ export function AddExerciseEvent({setShowAddNewExerciseEvent, exerciseTypes, pos
         heartRate: exerciseEventHeartRate
       });
       setFormSubmitted(formSubmitted + 1);
-      setShowAddNewExerciseEvent(false);
+      toggleShowAddNewWorkout(false);
     }
   
     return (
@@ -69,7 +69,7 @@ export function AddExerciseEvent({setShowAddNewExerciseEvent, exerciseTypes, pos
         borderColor={borderColor}
         paddingTop={2} >
         <Stack paddingRight={2} direction="row-reverse">
-            <CloseButton color={closeButtonColor} onClick={() => setShowAddNewExerciseEvent(false)} />   
+            <CloseButton color={closeButtonColor} onClick={() => toggleShowAddNewWorkout(false)} />   
         </Stack>
 
         <VStack spacing={7}>
