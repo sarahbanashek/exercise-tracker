@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { 
   CloseButton,
   Heading,
@@ -9,14 +10,25 @@ import {
   Td,
   Stack 
 } from "@chakra-ui/react";
+import { DisplayPagination } from './DisplayPagination';
 import { monthDayYearDate } from '../utilities/monthDayYearDate';
 
 const borderColor = 'blue.400';
 const closeButtonColor = 'blue.700';
 const colorScheme = 'blue';
 const textColor = 'blue.600';
+const lightBorderColor = 'blue.200';
+
+function pagination(dataSet, pageNum, amtPerPage) {
+  return dataSet.slice(amtPerPage * (pageNum - 1), pageNum * amtPerPage);
+}
 
 export function ViewAllWorkouts({listAllExerciseEvents, toggleShowExerciseEvents}) {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const resultsPerPage = 10;
+  const numOfPages = Math.ceil(listAllExerciseEvents.length / resultsPerPage);
+
     return (
       <Stack
         border="2px"
@@ -30,7 +42,7 @@ export function ViewAllWorkouts({listAllExerciseEvents, toggleShowExerciseEvents
 
         <Heading color={textColor} size="md">Your Workouts</Heading>
 
-        <Stack p={10}>
+        <Stack align="center" spacing={5} p={10}>
           <Table variant="simple" colorScheme={colorScheme} paddingRight={10}>
             <Thead>
               <Tr key="title-row">
@@ -42,7 +54,7 @@ export function ViewAllWorkouts({listAllExerciseEvents, toggleShowExerciseEvents
             </Thead>
 
             <Tbody>  
-              {listAllExerciseEvents.map(e => 
+              {pagination(listAllExerciseEvents, currentPage, resultsPerPage).map(e => 
               <Tr key={e.id}>
                 <Td key={'date-' + e.id}>{monthDayYearDate(e.date)}</Td>
                 <Td key={'type-' + e.id}>{e.description}</Td>
@@ -52,6 +64,7 @@ export function ViewAllWorkouts({listAllExerciseEvents, toggleShowExerciseEvents
               )}
             </Tbody>
           </Table>
+          <DisplayPagination {...{currentPage, setCurrentPage, numOfPages, colorScheme, borderColor, lightBorderColor, textColor}} />
         </Stack>
       </Stack>
     );

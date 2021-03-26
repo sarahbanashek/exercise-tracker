@@ -5,6 +5,7 @@ import {
   Checkbox,
   CheckboxGroup,
   CloseButton,
+  Divider,
   FormControl,
   FormHelperText,
   Heading,
@@ -13,28 +14,36 @@ import {
   StackDivider,
   VStack 
 } from "@chakra-ui/react";
+import { DisplayPagination } from './DisplayPagination';
 import { numericalDate } from '../utilities/numericalDate';
 
 const borderColor = 'pink.400';
 const closeButtonColor = 'pink.700';
 const colorScheme = 'pink';
-const textColor = 'pink.600'
+const textColor = 'pink.600';
+const lightBorderColor = 'pink.200';
+
+function pagination(dataSet, pageNum, amtPerPage) {
+  return dataSet.slice(amtPerPage * (pageNum - 1), pageNum * amtPerPage);
+}
 
 export function DeleteExerciseEvents({listAllExerciseEvents, toggleShowExerciseEvents, deleteExerciseEvents}) {
     const [toDelete, setToDelete] = useState(new Map(listAllExerciseEvents.map(e => [e.id, false])));
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const resultsPerPage = 10;
+    const numOfPages = Math.ceil(listAllExerciseEvents.length / resultsPerPage);
   
     function toggleDeleteWorkout(id) {
       const isSelected = toDelete.get(id);
       setToDelete(previous => new Map(previous).set(id, !isSelected));
-      console.log(isSelected);
     }
-  
+
     function handleSubmit() {
-      console.log(toDelete);
       const idsToDelete = [...toDelete.entries()].filter(([_, val]) => val).map(([key, _]) => key);
       deleteExerciseEvents(idsToDelete);
       toggleShowExerciseEvents(false, 'delete');
-      console.log(idsToDelete);
+      setToDelete(new Map(listAllExerciseEvents.map(e => [e.id, false])));
     }
   
     return (
@@ -54,7 +63,7 @@ export function DeleteExerciseEvents({listAllExerciseEvents, toggleShowExerciseE
         <VStack spacing={7} p={10} >
           <CheckboxGroup colorScheme={colorScheme}>
             <Stack spacing={4}>
-              {listAllExerciseEvents.map(e =>
+              {pagination(listAllExerciseEvents, currentPage, resultsPerPage).map(e =>
                 <Checkbox key={'exercise-event-' + e.id} 
                   isChecked={toDelete.get(e.id)} 
                   onChange={() => toggleDeleteWorkout(e.id)}
@@ -71,6 +80,8 @@ export function DeleteExerciseEvents({listAllExerciseEvents, toggleShowExerciseE
               )}
             </Stack>
           </CheckboxGroup>
+          <DisplayPagination {...{currentPage, setCurrentPage, numOfPages, colorScheme, borderColor, lightBorderColor, textColor}} />
+          <Divider orientation="horizontal" borderColor={lightBorderColor} />
           <FormControl>
               <Button colorScheme={colorScheme} type="submit" onClick={() => handleSubmit()}>Submit</Button>
               <FormHelperText color={textColor}>Warning: This cannot be undone</FormHelperText>
