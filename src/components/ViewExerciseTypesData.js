@@ -40,7 +40,7 @@ export function ViewExerciseTypesData({ loggedExerciseTypes, loggedExerciseTimeS
                         p={3}
                     >
                         <Text size="sm">Less than {frequencyTenPercent} each:</Text>
-                        {frequencyOthers.map(type => <Text size="sm">{type}</Text>)}
+                        {frequencyOthers.map(type => <Text size="sm" key={type}>{type}</Text>)}
                     </VStack>)
                 : (
                     <VStack 
@@ -78,7 +78,7 @@ export function ViewExerciseTypesData({ loggedExerciseTypes, loggedExerciseTimeS
                     >
                         {/* <Text size="sm">Less than {(timeTenPercent / 60).toFixed(2)} hours each:</Text> */}
                         <Text size="sm">Less than 2 hours each:</Text>
-                        {timeOthers.map(type => <Text size="sm">{type}</Text>)}
+                        {timeOthers.map(type => <Text size="sm" key={type}>{type}</Text>)}
                     </VStack>
                 )
                 : (
