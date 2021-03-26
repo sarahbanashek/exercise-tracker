@@ -48,22 +48,18 @@ export function App() {
     loadData();
   }, [hasSubmittedData]);
 
-  async function getAllWorkoutTypes() {
-    try {
-      const data = await fetch(`${URL_BASE}/add-exercise-event`, { method: 'GET', redirect: 'follow'});
-      const dbData = await data.json();
-      setExerciseTypes(dbData);
-    } catch (error) {
-      console.log(error);
+  useEffect(() => {
+    async function getAllWorkoutTypes() {
+      try {
+        const data = await fetch(`${URL_BASE}/add-exercise-event`, { method: 'GET', redirect: 'follow'});
+        const dbData = await data.json();
+        setExerciseTypes(dbData);
+      } catch (error) {
+        console.log(error);
+      }
     }
-  }
-
-  function toggleShowAddNewWorkout(bool) {
-    if (bool) {
-      getAllWorkoutTypes();
-    }
-    setShowAddNewExerciseEvent(bool);
-  }
+    getAllWorkoutTypes();
+  }, [hasSubmittedData])
 
   async function postNewExerciseEvent(eventData) {
     const response = await fetch(`${URL_BASE}/add-exercise-event`, {
@@ -80,7 +76,6 @@ export function App() {
 
       setHasSubmittedData(hasSubmittedData + 1);
   }
-
   
   async function getUnusedExerciseTypes() {
     try {
@@ -153,8 +148,8 @@ export function App() {
       <Heading>Exercise Tracker</Heading>
       <VStack id="button-stack" p={10} spacing={5}>
         {showAddNewExerciseEvent && exerciseTypes
-          ? <AddExerciseEvent { ...{toggleShowAddNewWorkout, exerciseTypes, postNewExerciseEvent, getUnusedExerciseTypes, unusedExerciseTypes, editExerciseTypesInDB} }/>
-          : <Button colorScheme="teal" onClick={() => toggleShowAddNewWorkout(true)}>Add a New Workout</Button>
+          ? <AddExerciseEvent { ...{setShowAddNewExerciseEvent, exerciseTypes, postNewExerciseEvent, getUnusedExerciseTypes, unusedExerciseTypes, editExerciseTypesInDB} }/>
+          : <Button colorScheme="teal" onClick={() => setShowAddNewExerciseEvent(true)}>Add a New Workout</Button>
         }
         {showAllExerciseEvents && listAllExerciseEvents
           ? <ViewAllWorkouts {...{listAllExerciseEvents, toggleShowExerciseEvents}} />

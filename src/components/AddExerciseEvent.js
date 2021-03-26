@@ -24,17 +24,21 @@ const closeButtonColor = 'teal.700';
 const colorScheme = 'teal';
 const textColor = 'teal.700';
 
-export function AddExerciseEvent({toggleShowAddNewWorkout, exerciseTypes, postNewExerciseEvent, getUnusedExerciseTypes, unusedExerciseTypes, editExerciseTypesInDB}) {
+export function AddExerciseEvent({setShowAddNewExerciseEvent, exerciseTypes, postNewExerciseEvent, getUnusedExerciseTypes, unusedExerciseTypes, editExerciseTypesInDB}) {
+    // const [todaysDate, setTodaysDate] = useState();
     const [exerciseEventDate, setExerciseEventDate] = useState();
     const [exerciseEventType, setExerciseEventType] = useState(1);
     const [exerciseEventDuration, setExerciseEventDuration] = useState();
     const [exerciseEventHeartRate, setExerciseEventHeartRate] = useState();
     const [formSubmitted, setFormSubmitted] = useState(0);
     const [showEditExerciseTypes, setShowEditExerciseTypes] = useState(false);
-  
+
     useEffect(() => {
       let today = new Date();
       const offset = today.getTimezoneOffset();
+      // today = new Date(today.getTime() - (offset * 60000)).toISOString().split('T')[0];
+      // setTodaysDate(today);
+      // setExerciseEventDate(today);
       today = new Date(today.getTime() - (offset * 60000));
       setExerciseEventDate(today.toISOString().split('T')[0]);
       setExerciseEventType(1);
@@ -59,7 +63,7 @@ export function AddExerciseEvent({toggleShowAddNewWorkout, exerciseTypes, postNe
         heartRate: exerciseEventHeartRate
       });
       setFormSubmitted(formSubmitted + 1);
-      toggleShowAddNewWorkout(false);
+      setShowAddNewExerciseEvent(false);
     }
   
     return (
@@ -69,7 +73,7 @@ export function AddExerciseEvent({toggleShowAddNewWorkout, exerciseTypes, postNe
         borderColor={borderColor}
         paddingTop={2} >
         <Stack paddingRight={2} direction="row-reverse">
-            <CloseButton color={closeButtonColor} onClick={() => toggleShowAddNewWorkout(false)} />   
+            <CloseButton color={closeButtonColor} onClick={() => setShowAddNewExerciseEvent(false)} />   
         </Stack>
 
         <VStack spacing={7}>
@@ -84,7 +88,7 @@ export function AddExerciseEvent({toggleShowAddNewWorkout, exerciseTypes, postNe
                 pattern="\d{4}-\d{2}-\d{2}"
                 placeholder="yyyy-mm-dd"
                 defaultValue={exerciseEventDate}
-                
+                // max={todaysDate}
                 focusBorderColor={borderColor}
                 onChange={e => setExerciseEventDate(e.target.value)} 
                 />
