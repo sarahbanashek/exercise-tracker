@@ -42,7 +42,7 @@ export function DeleteExerciseEvents({listAllExerciseEvents, toggleShowExerciseE
       setDescriptionBoxWidths(calculateDescriptionBoxWidths(listAllExerciseEvents));
     }, [listAllExerciseEvents]);
     
-    const resultsPerPage = 15;
+    const resultsPerPage = 10;
     const numOfPages = Math.ceil(listAllExerciseEvents.length / resultsPerPage);
   
     function toggleDeleteWorkout(id) {
