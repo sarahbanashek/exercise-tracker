@@ -1,12 +1,13 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import { Button, Divider, Heading, VStack } from "@chakra-ui/react";
+import { Button, Divider, Heading, HStack, Spinner, VStack } from "@chakra-ui/react";
 import { AddExerciseEvent } from './components/AddExerciseEvent';
 import { DataAverages } from './components/DataAverages';
 import { ViewRecentExerciseData } from './components/ViewRecentExerciseData';
 import { ViewExerciseTypesData } from './components/ViewExerciseTypesData';
 import { ViewAllWorkouts } from './components/ViewAllWorkouts';
 import { DeleteExerciseEvents } from './components/DeleteExerciseEvents';
+import { SuccessAlert } from './components/SuccessAlert';
 
 const URL_BASE = 'http://localhost:3001';
 
@@ -23,6 +24,7 @@ export function App() {
   const [showAddNewExerciseEvent, setShowAddNewExerciseEvent] = useState(false);
   const [showAllExerciseEvents, setShowAllExerciseEvents] = useState(false);
   const [showExerciseEventsToDelete, setShowExerciseEventsToDelete] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState({show: false});
 
   useEffect(() => {
     async function loadData() {
@@ -74,6 +76,7 @@ export function App() {
       const parsedData = response.json();
       console.log(parsedData);
 
+      setShowSuccessAlert({show: true, type: 'added workout'});
       setHasSubmittedData(hasSubmittedData + 1);
   }
   
@@ -100,6 +103,7 @@ export function App() {
     const parsedData = response.json();
     console.log(parsedData);
 
+    setShowSuccessAlert({show: true, type: 'edited exercise types'});
     setHasSubmittedData(hasSubmittedData + 1);
   }
 
@@ -137,38 +141,57 @@ export function App() {
     const parsedData = response.json();
     console.log(parsedData);
 
+    setShowSuccessAlert({show: true, type: 'deleted workouts'});
     setHasSubmittedData(hasSubmittedData + 1);
   }
 
+
   return (
     !hasLoaded 
-      ? <div>Loading...</div> 
+      ? 
+      <HStack justify="center">
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+        />
+        <Heading size="lg">Loading</Heading>
+      </HStack> 
       : 
-    <div id="App">
-      <Heading>Exercise Tracker</Heading>
-      <VStack id="button-stack" p={10} spacing={5}>
-        {showAddNewExerciseEvent && exerciseTypes
-          ? <AddExerciseEvent { ...{setShowAddNewExerciseEvent, exerciseTypes, postNewExerciseEvent, getUnusedExerciseTypes, unusedExerciseTypes, editExerciseTypesInDB} }/>
-          : <Button colorScheme="teal" onClick={() => setShowAddNewExerciseEvent(true)}>Add a New Workout</Button>
-        }
-        {showAllExerciseEvents && listAllExerciseEvents
-          ? <ViewAllWorkouts {...{listAllExerciseEvents, toggleShowExerciseEvents}} />
-          : <Button colorScheme="blue" onClick={() => toggleShowExerciseEvents(true, 'view')}>
-              View Your Workout Log
-            </Button>
-        }
-        {showExerciseEventsToDelete && listAllExerciseEvents
-          ? <DeleteExerciseEvents {...{listAllExerciseEvents, toggleShowExerciseEvents, deleteExerciseEvents}} />
-          : <Button colorScheme="pink" onClick={() => toggleShowExerciseEvents(true, 'delete')}>
-              Delete a Workout From Your Log
-            </Button>
-        }
-      </VStack>
-      <Divider border="2px" borderColor="purple.100" />
-      <DataAverages {...{averages}}/>
-      <Divider border="2px" borderColor="purple.100" />
-      <ViewRecentExerciseData {...{last20} }/>
-      <ViewExerciseTypesData {...{loggedExerciseTypes, loggedExerciseTimeSpent}} />
-    </div>
+      <div id="App">
+        <VStack p={10} spacing={5}>
+          <Heading>Exercise Tracker</Heading>
+          {showSuccessAlert.show
+            ? <SuccessAlert {...{showSuccessAlert, setShowSuccessAlert}} />
+            : null
+          }
+          {showAddNewExerciseEvent && exerciseTypes
+            ? <AddExerciseEvent {...{setShowAddNewExerciseEvent, exerciseTypes, postNewExerciseEvent, getUnusedExerciseTypes, unusedExerciseTypes, editExerciseTypesInDB}} />
+            : <Button colorScheme="teal" onClick={() => setShowAddNewExerciseEvent(true)}>Add a New Workout</Button>
+          }
+          {showAllExerciseEvents && listAllExerciseEvents
+            ? <ViewAllWorkouts {...{listAllExerciseEvents, toggleShowExerciseEvents}} />
+            : <Button colorScheme="blue" onClick={() => toggleShowExerciseEvents(true, 'view')}>
+                View Your Workout Log
+              </Button>
+          }
+          {showExerciseEventsToDelete && listAllExerciseEvents
+            ? <DeleteExerciseEvents {...{listAllExerciseEvents, toggleShowExerciseEvents, deleteExerciseEvents}} />
+            : <Button colorScheme="pink" onClick={() => toggleShowExerciseEvents(true, 'delete')}>
+                Delete a Workout From Your Log
+              </Button>
+          }
+        </VStack>
+
+        <Divider border="2px" borderColor="purple.100" />
+        <DataAverages {...{averages}}/>
+        <Divider border="2px" borderColor="purple.100" />
+
+        <ViewRecentExerciseData {...{last20}} />
+
+        <ViewExerciseTypesData {...{loggedExerciseTypes, loggedExerciseTimeSpent}} />
+      </div>
   );
 }
