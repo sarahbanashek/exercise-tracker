@@ -1,4 +1,58 @@
-# Getting Started with Create React App
+# Exercise Tracker - Front End
+
+This application allows users to track their workouts and view multiple analyses of their data.
+
+## Features
+### Add a New Workout
+
+The add a new workout button opens a form in which users can input a new workout.
+
+![Add a New Workout](img/add-a-new-workout.gif)
+
+The Workout Type dropdown is arranged in order of the frequency of use and can be edited by selecting the "edit workout types" option. Users can add their own options and remove any workout type that has not been used in their log.
+
+![Edit Workout Types](img/edit-workout-types.gif)
+
+### View Workout Log
+Every workout that has been recorded is shown in the Workout Log sorted by date.
+
+![View Workout Log](img/view-workout-log.gif)
+
+### Delete Workouts
+Users can delete any workout they have recorded from their log. 
+
+![Delete Workout](img/delete-workout.gif)
+
+### Workout Length & Heart Rate Averages
+An up-to-date display of the user's average workout length and heart rate are shown along with the percent change for the past seven days. These numbers are immediately adjusted when a workout is added or deleted.
+
+![Data Averages](img/data-averages.png)
+
+### Last 20 Workouts
+The 20 most recent workouts are displayed in a line chart that tracks both workout duration and recorded heart rate. A tooltip details the date, type, length, and heart rate for the workout.
+
+![Last 20 Workouts Chart](img/last-20-workouts.gif)
+
+### Breakdown of Workout Types
+Two pie charts allow users to visualize the breakdown of the various workout types they have recorded. One chart shows how many times each workout has been logged, while the other shows how much time has been spent performing each workout type.
+
+![Workout Types Pie Charts](img/workout-types-data.gif)
+
+## Technologies Used
+### Front End
+- React
+- Create React App
+- Recharts
+- Chakra UI
+
+### Back End
+- Node.js
+- Express
+- SQLite
+- Knex.js
+
+---
+---
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -10,61 +64,3 @@ In the project directory, you can run:
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
