@@ -2,6 +2,8 @@
 
 This application allows users to track their workouts and view multiple analyses of their data.
 
+![Exercise Tracker](img/exercise-tracker.gif)
+
 ## Features
 ### Add a New Workout
 
