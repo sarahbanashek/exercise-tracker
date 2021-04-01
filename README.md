@@ -4,12 +4,16 @@ This application allows users to track their workouts and view multiple analyses
 
 ![Exercise Tracker](img/exercise-tracker.gif)
 
+**Note: This repository contains only the front end. For the back end application, [click here](https://github.com/sarahbanashek/exercise-tracker-back-end).**
+
 ## Features
 ### Add a New Workout
 
 The add a new workout button opens a form in which users can input a new workout.
 
 ![Add a New Workout](img/add-a-new-workout.gif)
+
+### Edit Workout Types
 
 The Workout Type dropdown is arranged in order of the frequency of use and can be edited by selecting the "edit workout types" option. Users can add their own options and remove any workout type that has not been used in their log.
 
@@ -40,6 +44,8 @@ Two pie charts allow users to visualize the breakdown of the various workout typ
 
 ![Workout Types Pie Charts](img/workout-types-data.gif)
 
+---
+
 ## Technologies Used
 ### Front End
 - React
@@ -47,7 +53,7 @@ Two pie charts allow users to visualize the breakdown of the various workout typ
 - Recharts
 - Chakra UI
 
-### Back End
+### [Back End](https://github.com/sarahbanashek/exercise-tracker-back-end)
 - Node.js
 - Express
 - SQLite
