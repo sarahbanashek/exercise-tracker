@@ -54,7 +54,6 @@ Two pie charts allow users to visualize the breakdown of the various workout typ
 - Knex.js
 
 ---
----
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -62,7 +61,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
-### `yarn start`
+### `npm install`
+Installs all dependencies.
+
+### `npm start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
