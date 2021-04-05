@@ -5,12 +5,12 @@ import { pieChartColors, tooltipBackgroundColors } from '../utilities/colors';
 const backgroundColorsLength = tooltipBackgroundColors.length;
 
 export function ViewExerciseTypesData({ loggedExerciseTypes, loggedExerciseTimeSpent }) {
-    const frequencyTenPercent = (loggedExerciseTypes[1]['COUNT(exercise_events.id)'] * 0.1).toFixed(0);
+    const frequencyTenPercent = (loggedExerciseTypes[1] * 0.1).toFixed(0);
     let frequencyOthersDescriptions = [];
     let frequencyOthersCount = 0;
     let frequencyFinal = [];
     loggedExerciseTypes[0].forEach(obj => {
-        if (obj['COUNT(exercise_events.id)'] >= frequencyTenPercent) {
+        if (obj.totalCount >= frequencyTenPercent) {
             frequencyFinal.push(obj);
         } else {
             frequencyOthersDescriptions.push(obj.description);
@@ -18,23 +18,23 @@ export function ViewExerciseTypesData({ loggedExerciseTypes, loggedExerciseTimeS
         }
     });
     if (frequencyOthersCount > 0) {
-        frequencyFinal.unshift({description: 'other', 'COUNT(exercise_events.id)': frequencyOthersCount });
+        frequencyFinal.unshift({description: 'other', totalCount: frequencyOthersCount });
     }
 
-    // const timeTenPercent = (loggedExerciseTimeSpent[1]['SUM(duration)'] * 0.1).toFixed(0);
+    // const timeTenPercent = (loggedExerciseTimeSpent[1] * 0.1).toFixed(0);
     let timeOthersDescriptions = [];
     let timeOthersCount = 0;
     let timeFinal = [];
     loggedExerciseTimeSpent[0].forEach(obj => {
-        if (obj['SUM(duration)'] >= 120) {
+        if (obj.totalTime >= 120) {
             timeFinal.push(obj);
         } else {
             timeOthersDescriptions.push(obj.description);
-            timeOthersCount += obj['SUM(duration)'];
+            timeOthersCount += obj.totalTime;
         }
     });
     if (timeOthersCount > 0) {
-        timeFinal.unshift({description: 'other', 'SUM(duration)': timeOthersCount});
+        timeFinal.unshift({description: 'other', totalTime: timeOthersCount});
     }
     
     function CustomTooltipFrequency({ active, payload }) {
@@ -122,7 +122,7 @@ export function ViewExerciseTypesData({ loggedExerciseTypes, loggedExerciseTimeS
                                 data={frequencyFinal} 
                                 outerRadius="70%" 
                                 label={entry => entry.description} 
-                                dataKey="COUNT(exercise_events.id)"
+                                dataKey="totalCount"
                                 startAngle={90}
                                 endAngle={450}
                                 isAnimationActive={false}
@@ -144,7 +144,7 @@ export function ViewExerciseTypesData({ loggedExerciseTypes, loggedExerciseTimeS
                                 data={timeFinal} 
                                 outerRadius="70%" 
                                 label={entry => entry.description} 
-                                dataKey="SUM(duration)"
+                                dataKey="totalTime"
                                 startAngle={90}
                                 endAngle={450}
                                 isAnimationActive={false}
