@@ -28,7 +28,7 @@ export function EditExerciseTypes({unusedExerciseTypes, editExerciseTypesInDB, s
       data.toRemove = idsToRemove;
     }
     if (workoutsToAdd) {
-      data.toAdd = workoutsToAdd;
+      data.toAdd = workoutsToAdd.split(/,\s*/g);
     }
     editExerciseTypesInDB(data);
     setShowEditExerciseTypes(false);
